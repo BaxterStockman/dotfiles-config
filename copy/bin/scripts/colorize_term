@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+COLOR_FILE=${FILE:-}
+

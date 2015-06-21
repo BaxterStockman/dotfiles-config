@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sessions=`who | grep pts | wc -l`
+[[ "$sessions" -eq "0" ]] && systemctl suspend

@@ -1,0 +1,8 @@
+URxvt.font:xft:Roboto Slab:style=Regular:pixelsize=12
+URxvt.boldFont:xft:Roboto Slab:style=Bol:pixelsize=12
+URxvt.italicFont:xft:Roboto Slab:style=Italic:pixelsize=12
+URxvt.boldItalicFont:xft:Roboto Slab:style=Bold Italic:pixelsize=12
+URxvt.blackFont:xft:Roboto Slab:style=Black:pixelsize=12
+URxvt.blackItalicFont:xft:Roboto Slab:style=Black Italic:pixelsize=12
+
+! vim:ft=xdefaults

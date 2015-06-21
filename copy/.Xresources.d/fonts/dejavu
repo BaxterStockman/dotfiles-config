@@ -1,0 +1,10 @@
+URxvt.font:xft:DejaVu Sans Mono:style=Book:pixelsize=13
+URxvt.boldFont:xft:DejaVu Sans Mono:style=Book:pixelsize=13
+URxvt.italicFont:xft:DejaVu Sans Mono:style=Oblique:pixelsize=13
+URxvt.boldItalicFont:xft:DejaVu Sans Mono:style=Oblique:pixelsize=13
+
+! Corrects issue with infinality kerning
+! As recommended at https://bbs.archlinux.org/viewtopic.php?pid=1396477
+URxvt*letterSpace: -0.9
+
+! vim:ft=xdefaults

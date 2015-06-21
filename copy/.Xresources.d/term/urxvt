@@ -1,0 +1,94 @@
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Get solarized colors right
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+URxvt*.intensityStyles:     false
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Fonts
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+URxvt*.BD:  White
+URxvt*.colorUL: #00D1FF
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Scrollbar
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+URxvt*.scrollStyle:         plain
+URxvt*.scrollTtyKeypress:   true
+URxvt*.scrollTtyOutput:     false
+URxvt*.scrollWithBuffer:    false
+URxvt*.scrollBar:           false
+URxvt*.scrollBar_right:     false
+URxvt*.scrollBar_floating:  false
+URxvt*.secondaryScroll:     true
+URxvt*.secondaryScreen:     true
+URxvt*.scrollColor:         #222222
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Perl extensions
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+URxvt*.perl-ext-common: default,clipboard,keyboard-select,url-select,-option-popup,-selection-popup,-realine
+URxvt*.matcher.button:  1
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Perl options
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Underline all urls
+URxvt*.url-select.underline:    true
+! Set url-open button to mouse 1
+URxvt*.url-select.button:       1
+! Launch urls with Firefox
+URxvt*.url-select.launcher:     dwb
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Keybindings
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Set meta key
+URxvt*modifier: super
+! Activate keyboard select mode
+URxvt*.keysym.Mod4-Escape:  perl:keyboard-select:activate
+! Url-select
+URxvt*.keysym.Mod4-u:       perl:url-select:select_next
+! Clipboard stuff
+URxvt*.keysym.C-Shift-c:    perl:clipboard:copy
+URxvt*.keysym.C-Chift-v:    perl:clipboard:paste
+URxvt*.keysym.C-Mod4-v:     perl:clipboard:paste_escaped
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Cursor
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+URxvt*.cursorBlink:     true
+!URxvt*.cursorColor:     Cyan
+URxvt*.cursorUnderline: false
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Pointer
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+URxvt*.pointerBlank:    true
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Linebuffer
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! I use Tmux for buffer, so set to 0
+URxvt*.saveLines:       0
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Cut & Paste Settings -- DO NOT TOUCH!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+URxvt*.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt*.iso14755: False
+
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Miscellaneous settings
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Inhibit writing record into system log file utmp
+URxvt*.utmpInhibit: false
+! De-iconify (map) on receipt of bell character
+URxvt*.mapAlert:    true
+! Declare terminal name
+URxvt*.termName:    screen-256color
+! Start as login shell
+URxvt*.loginShell:      true
+URxvt*.urgentOnBell:    true
+URxvt*.visualBell:      false
+URxvt*.lineSpace:       0
+

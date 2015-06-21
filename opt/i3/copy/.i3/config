@@ -1,0 +1,241 @@
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+# run script to solve dbus registration problem with gnome-session apps
+exec --no-startup-id /usr/bin/i3-gnome
+
+# set workspace names and variables
+set $wsp1 1: www
+set $wsp2 2
+set $wsp3 3
+set $wsp4 4
+set $wsp5 5
+set $wsp6 6
+set $wsp7 7
+set $wsp8 8
+set $wsp9 9
+set $wsp10 10: mail
+
+# Set display output variables
+set $builtin		eDP1
+set $external_left	DP1
+set $external_right	HDMI2
+
+# set workspaces to particular monitors
+workspace "$wsp1" output $external_left
+workspace "$wsp2" output $external_left
+workspace "$wsp3" output $external_left
+workspace "$wsp4" output $external_left
+workspace "$wsp5" output $external_left
+workspace "$wsp6" output $external_left
+workspace "$wsp7" output $external_left
+workspace "$wsp8" output $external_left
+workspace "$wsp9" output $external_left
+workspace "$wsp10" output $external_right
+
+# run applications on startup
+exec_always compton -c
+exec sh ~/.wallpaper/wallpaper.sh
+
+# open applications on particular workspaces on startup
+exec --no-startup-id i3-msg 'workspace $wsp1; exec dwb; exec i3-sensible-terminal'
+exec --no-startup-id i3-msg 'workspace $wsp10; exec thunderbird; exec i3-sensible-terminal'
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below. ISO 10646 = Unicode
+font pango: Inconsolata 11
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Keybindings
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# set $mod variable.  Mod1 is Alt, Mod4 is Super/Windows
+set $mod Mod1
+
+# Use Mouse + $mod to drag floating windows to the desired position
+floating_modifier $mod
+
+# Start a terminal
+bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+c exec i3-sensible-terminal
+
+# Start an editor
+bindsym $mod+v exec i3-sensible-editor
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Start dmenu
+#bindsym $mod+d exec dmenu_run -b
+
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -b -i'
+
+# Change focus using vi-style bindings
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Split in horizontal orientation
+bindsym $mod+minus split h
+
+# Split in vertical orientation
+bindsym $mod+bar split v
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+o fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# Change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+a focus parent
+
+# Focus the child container
+#bindsym $mod+d focus child
+
+# Switch to workspace
+bindsym $mod+1 workspace $wsp1
+bindsym $mod+2 workspace $wsp2
+bindsym $mod+3 workspace $wsp3
+bindsym $mod+4 workspace $wsp4
+bindsym $mod+5 workspace $wsp5
+bindsym $mod+6 workspace $wsp6
+bindsym $mod+7 workspace $wsp7
+bindsym $mod+8 workspace $wsp8
+bindsym $mod+9 workspace $wsp9
+bindsym $mod+0 workspace $wsp10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $wsp1
+bindsym $mod+Shift+2 move container to workspace $wsp2
+bindsym $mod+Shift+3 move container to workspace $wsp3
+bindsym $mod+Shift+4 move container to workspace $wsp4
+bindsym $mod+Shift+5 move container to workspace $wsp5
+bindsym $mod+Shift+6 move container to workspace $wsp6
+bindsym $mod+Shift+7 move container to workspace $wsp7
+bindsym $mod+Shift+8 move container to workspace $wsp8
+bindsym $mod+Shift+9 move container to workspace $wsp9
+bindsym $mod+Shift+0 move container to workspace $wsp10
+
+# Move containers to different outputs
+bindsym $mod+Control+h move container to output left
+bindsym $mod+Control+j move container to output down
+bindsym $mod+Control+k move container to output up
+bindsym $mod+Control+l move container to output right
+
+# Move workspaces to different outputs
+bindsym $mod+Shift+Control+h move workspace to output left
+bindsym $mod+Shift+Control+j move workspace to output down
+bindsym $mod+Shift+Control+k move workspace to output up
+bindsym $mod+Shift+Control+l move workspace to output right
+bindsym $mod+Shift+Control+n move workspace to output right
+
+# Reload the configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# Exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# Execute commands interactively
+bindsym $mod+semicolon exec "i3-input -f Inconsolata-g -L 64 -P 'i3 command: '"
+bindsym $mod+Shift+semicolon exec "i3-input -f Inconsolata-g -L 64 -P 'Command: ' -F 'exec %s'"
+
+# resize window (you can also use the mouse for this)
+bindsym $mod+r mode "resize"
+
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Cosmetics
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Window decoration colors
+#
+#class                  border  backgr. text    indicator
+client.focused          #231717 #768078 #ffffff #2f343a
+client.focused_inactive #333333 #606861 #ffffff #484e50
+client.unfocused        #333333 #3E443F #ffffff #292d2e
+client.urgent           #2f343a #BF9E9D #231717 #900000
+
+# Border style
+new_window 1pixel
+new_float normal
+hide_edge_borders horizontal
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    tray_output primary
+    position top
+    mode dock
+    hidden_state hide
+    font pango: Inconsolata-g 9
+
+    status_command ~/.i3/conky-i3bar
+
+    colors {
+        background      #3E443F
+        statusline      #000000
+
+        # class             # text  # backgr.
+        focused_workspace   #3D5161 #CDD7DF
+        active_workspace    #3D5161 #CDD7DF
+        inactive_workspace  #CDD7DF #3D5161
+        urgent_workspace    #231717 #BF9E9D
+    }
+}

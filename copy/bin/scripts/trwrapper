@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Background and foreground colors from Solarized light theme
+BG="0x002b36"
+FG="0x839496"
+
+#conky -d -c $1 | dzen2 -ta r -h '12' -fn 'inconsolata-g:size=9' &
+
+trayer                      \
+    --edge bottom           \
+    --align right           \
+    --margin 0              \
+    --widthtype percent     \
+    --width 100             \
+    --heighttype pixel      \
+    --height 12             \
+    --SetDockType true      \
+    --SetPartialStrut true  \
+    --transparent true      \
+    # 255 = fully transparent, 0 = fully opaque
+    --alpha 0               \
+    --tint ${BG}            \
+    --expand false          \
+    --padding 1             \
+

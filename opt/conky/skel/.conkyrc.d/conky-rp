@@ -1,0 +1,43 @@
+background no
+cpu_avg_samples 4
+default_color grey
+default_outline_color white
+default_shade_color white
+extra_newline no
+if_up_strictness address
+max_text_width 0
+net_avg_samples 2
+no_buffers yes
+out_to_console yes
+out_to_stderr no
+update_interval 1.0
+uppercase no
+use_spacer left
+short_units yes
+total_run_times 0
+update_interval 0.5
+
+# Colors
+color1 FF0000
+
+TEXT
+${execi 1800 pacman -Qu | wc -l} pkg(s) \
+:: wsp ${exec ratpoison -c "getenv wspl"} \
+:: ${exec ratpoison -c "windows %a" | perl -wn -e 'chomp; print "[$_] "'}\
+:: ${if_match ${fs_free_perc /}<10}$color1${endif}/ ${fs_free /} \
+:: ${if_match ${fs_free_perc /home/matt}<10}$color1${endif}/home ${fs_free /home/matt} \
+:: ${if_match ${hwmon 0 temp 1}>83}$color1${endif}cpu ${cpu cpu0}% ${hwmon 0 temp 1}°C \
+:: ${if_match ${memperc}>90}$color1${endif}mem $mem/$memmax ${memperc}% \
+${if_up wlan0}\
+:: ${upspeed wlan0}↑ \
+:: ${downspeed wlan0}↓ \
+:: wifi ${wireless_link_qual_perc wlan0}% @${wireless_essid wlan0} \
+${endif}\
+${if_up eth0}\
+:: ${upspeed eth0}↑ \
+:: ${downspeed eth0}↓ \
+${endif}\
+:: vol ${exec amixer get Master | perl -ne '/\A.*Mono.*?(\d{1,3})%.*\Z/ and print $1'}% \
+:: ${if_match "${acpiacadapter ACAD}"=="on-line"}AC\
+${else}batt ${battery_percent BAT1}% ${battery_time BAT1}${endif} \
+:: ${time %m/%d/%y %I:%M} \

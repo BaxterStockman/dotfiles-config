@@ -1,0 +1,3 @@
+processdir=lala
+
+echo "ARGV: $*"

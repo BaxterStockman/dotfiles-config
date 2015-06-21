@@ -1,0 +1,16 @@
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Xautolock settings
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! Moving mouse to lower left corner activates locker
+! Order of corners: UL UR LL LR
+! 0 = ignore, + = start after specified seconds,
+! - = do not start locker at all
+Xautolock.corners: --+-
+! Set cornersize to 5 pixels
+Xautolock.cornersize:       6
+Xautolock.cornerdelay:      5
+Xautolock.cornerredelay:    15
+Xautolock.locker:           slimlock
+Xautolock.time:             5
+Xautolock.killer:           ~/bin/scripts/sleeper
+Xautolock.killtime:         10

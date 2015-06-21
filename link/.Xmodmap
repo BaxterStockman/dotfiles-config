@@ -1,0 +1,3 @@
+! Unset Mod3 and then assign its function to the Menu key
+clear Mod3
+add Mod3 = Menu

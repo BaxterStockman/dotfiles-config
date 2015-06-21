@@ -1,0 +1,46 @@
+# abort
+C-g
+
+# delete
+C-k
+
+# exchangedown
+C-Down
+# exchangeleft
+C-Left
+# exchangeright
+C-Right
+# exchangeup
+C-Up
+
+# exec
+exclam
+
+# focusdown
+Down
+# focuslast
+M-Tab
+# focusleft
+Left
+# focusright
+Right
+# focusup
+Up
+
+# hsplit
+C-S
+# hsplit
+S
+
+# nextscreen
+N
+# prevscreen
+P
+
+# split
+C-s
+# split
+s
+
+# time
+C-a

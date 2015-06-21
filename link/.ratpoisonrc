@@ -1,0 +1,293 @@
+################################################################################
+# Initial setup stuff
+################################################################################
+
+# Unbind some default keybindings
+# For some reason, '$HOME' doesn't get
+# replaced by the actual path when calling
+# 'source' directly.  Using 'exec' instead
+# means that '$HOME' gets interpreted by the
+# shell.
+exec ratpoison -c "source $HOME/.ratpoisonrc.unbind"
+
+# Set prefix to ctrl-z
+escape C-z
+
+# 'Escape' the prefix so that it is sent to the currently-focused pane
+bind C-z generate
+
+# Exec .xinitrc local and
+# load .Xresources and .Xresources local
+# For some reason, merging them in .xinitrc
+# doesn't work with ratpoison...
+exec $HOME/.xinitrc.local
+exec xrdb -merge $HOME/.Xresources
+exec xrdb -merge $HOME/.Xresources.local
+
+# Create six windows
+exec rpws init 6 -k
+
+# There are three different ways ratpoison can "name" frames.
+# By title, name, or class. Title gets you gunk like "emacs@localhost.localdomain";
+# but name and class give you the sensible "emacs" or "Emacs".
+set winname class
+
+# Disable startup message
+startup_message off
+
+#rudeness is a bitwise or of the following values:
+# 1    Transient windows may raise.
+# 2    Normal windows may raise.
+# 4    New transient windows end up in the foreground.
+# 8    New normal windows end up in the foreground.
+rudeness 13
+
+################################################################################
+# Appearance-related settings
+################################################################################
+
+# Cosmetics
+# exec compton -c -f -D 5
+exec compton --config $HOME/.compton.conf -b
+exec $HOME/bin/scripts/wallpaper $HOME/.wallpaper
+
+# Bar settings
+set wingravity center
+set transgravity center
+set bargravity n
+set border 0 0
+set barborder 1
+set barpadding 1 1
+set inputwidth 100
+
+# Conky setup
+unmanage conky
+unmanage conky-cli
+unmanage gimp
+#unmanage nm-applet
+unmanage panel
+
+# Open bars/trays/applets
+exec pgrep dzen2 || $HOME/bin/scripts/dzconky $HOME/.conkyrc.d/conky-rp
+#exec pgrep trayer || $HOME/bin/scripts/trwrapper
+#exec pgrep nm-applet || nm-applet
+
+# Restart eye candy when restarting rp
+#addhook restart exec killall conky
+#addhook restart exec killall compton
+#addhook restart exec killall dzen2
+#addhook restart exec killall feh
+#addhook restart exec killall nm-applet
+#addhook restart exec killall trayer
+
+# Quit eye candy when quitting rp
+#addhook quit exec killall conky
+#addhook quit exec killall compton
+#addhook quit exec killall dzen2
+#addhook quit exec killall feh
+#addhook quit exec killall nm-applet
+#addhook quit exec killall trayer
+
+# I commented out the following because it caused
+# issues when refreshing the ratpoison config, and
+# isn't really necessary when you have your terminal
+# emulator configured to display correctly.
+# Execute 'shrink' when changing window attributes
+#addhook switchwin shrink
+#addhook newindow shrink
+#addhook deletewindow shrink
+
+################################################################################
+# Mouse-related settings
+################################################################################
+
+# Banish the mouse with each screenchange
+addhook switchwin banish
+addhook switchframe banish
+addhook prefix banish
+
+# Run unclutter so the mouse hangs around no longer than needed.
+exec unclutter -idle 1 -jitter 2 -root
+
+# Change the mouse icon
+exec xsetroot -cursor_name left_ptr
+
+# Set the mouse warping option.
+warp on
+
+################################################################################
+# Display-related settings
+################################################################################
+
+# Redisplay - extend focused window to full
+# size of frame and redisplay it
+bind L redisplay
+
+################################################################################
+# Navigation-related settings
+################################################################################
+
+# Vim-style movements
+bind h focusleft
+bind j focusdown
+bind k focusup
+bind l focusright
+
+# Rotate focus between currently-visible panes
+bind space focus
+
+# Vim-style movements
+bind H exchangeleft
+bind J exchangedown
+bind K exchangeup
+bind L exchangeright
+
+# Move between screens
+bind C-l nextscreen
+bind C-h prevscreen
+
+# Window-splitting
+bind minus split
+bind bar hsplit
+
+################################################################################
+# Workspace and window-related settings
+################################################################################
+
+# This should set up rpws and groups
+# http://ratpoison.elektrubadur.se/rpws
+#exec rpws -i
+#exec rpws -b
+
+# Move between workspaces
+bind 1 exec rpws 1
+bind 2 exec rpws 2
+bind 3 exec rpws 3
+bind 4 exec rpws 4
+bind 5 exec rpws 5
+bind 6 exec rpws 6
+bind 7 exec rpws 7
+bind 8 exec rpws 8
+bind 9 exec rpws 9
+bind 0 exec rpws 10
+
+# Move between workspaces
+bind exclam rpwsm1
+bind at rpwsm2
+bind numbersign rpwsm3
+bind dollar rpwsm4
+bind percent rpwsm5
+bind asciicircum rpwsm6
+bind ampersand rpwsm7
+bind asterisk rpwsm8
+bind parenleft rpwsm9
+bind parenright rpwsm10
+
+# Select windows by number
+bind F1 select 0
+bind F2 select 1
+bind F3 select 2
+bind F4 select 3
+bind F5 select 4
+bind F6 select 5
+bind F7 select 6
+bind F8 select 7
+bind F9 select 8
+bind F1 select 9
+bind F11 select 10
+bind F12 select 11
+
+# Make focused window the only window
+bind O only
+
+# Close current window
+bind Q kill
+
+# Delete current window
+bind q delete
+
+# Undo last change of frame layout
+bind u undo
+
+# Save configuration to temporary file
+bind C-s exec mkdir -p $HOME/.ratpoisonrc.d; ratpoison -c sfdump > $HOME/.ratpoisonrc.d/layout.default
+
+# Restore configuration from temporary file
+bind C-r exec ratpoison -c sfrestore `[[ -e $HOME/.ratpoisonrc.d/layout.default ]] && cat $HOME/.ratpoisonrc.d/layout.default`
+
+################################################################################
+# Command-related settings
+################################################################################
+
+# aliasing keys within ratpoison
+alias dump exec ratpoison -c "setenv fs1 `ratpoison -c 'fdump'`"
+alias get exec ratpoison -c "frestore `ratpoison -c 'getenv fs1'`"
+alias reconfig exec ratpoison -c "source $HOME/.ratpoisonrc"
+alias reload exec rp-reload
+
+# make semicolon invoke ratpoison command, and colon shell command.
+bind semicolon colon
+bind colon exec
+
+# 'Nullify' prefix by pressing Escape
+bind Escape abort
+
+# Set double-press of escape sequence to send escape to current window
+bind C-z meta
+
+################################################################################
+# Application-related settings
+################################################################################
+
+### Aliases
+
+alias dmenu exec dmenu_run -b
+alias term exec urxvt
+alias edit term -e vim $HOME/.ratpoisonrc && ratpoison -c "reload"
+alias elinks term -e elinks
+alias firefox exec firefox
+
+## Bindings
+
+# time
+bind a time
+
+# Web browsers
+bind b exec dwb
+bind B elinks
+
+# Terminals
+bind Return term
+bind c term
+
+# Dmenu
+bind d dmenu
+
+# Runs a perl script which emulates the Mac's expose feature.
+bind e exec $HOME/bin/scripts/expose
+
+# Runs a shell script which creates an alt-tab menu analog
+bind E exec $HOME/bin/scripts/windows
+
+# Open link in dwb
+bind f exec dwb -x "tabopen `ratpoison -c getsel`"
+
+# Package update
+bind s term -e sudo pacman -Syu
+bind S term -e packer -Syu --noedit --noconfirm
+
+# Open Thunderbird email client
+bind t exec thunderbird
+
+# Open Vim
+bind v exec urxvt -e vim
+
+# Zathura pdf viewer
+bind z exec zathura
+
+################################################################################
+# Local setup
+################################################################################
+
+# Source local configuration
+exec ratpoison -c "source $HOME/.ratpoisonrc.local"

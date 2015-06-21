@@ -1,0 +1,16 @@
+# HTTP Cookie File
+# http://www.netscape.com/newsref/std/cookie_spec.html
+# This is a generated file!  Do not edit.
+# To delete cookies, use the Cookie Manager.
+
+localhost	FALSE	/	FALSE	1421765731	plushNoTopMenu	0
+localhost	FALSE	/	FALSE	1421765731	plushMultiOps	1
+localhost	FALSE	/	FALSE	1421765731	plushContainerWidth	100%25
+ratsserver	FALSE	/spotweb	FALSE	1392822545	sidebarVisibility	%5B%7B%22count%22%3A0%2C%22state%22%3A%22block%22%7D%2C%7B%22count%22%3A1%2C%22state%22%3A%22block%22%7D%2C%7B%22count%22%3A2%2C%22state%22%3A%22block%22%7D%5D
+#HttpOnly_ratsserver	FALSE	/spotweb	FALSE	1392822607	spotsession	fzashdbfxq6fipodzljue3c149hcy3qokozbr6eq4ss9hzqd60j9puxrzc8.1
+ratsserver	FALSE	/	FALSE	1421775499	plushNoTopMenu	0
+ratsserver	FALSE	/	FALSE	1421775499	plushMultiOps	1
+ratsserver	FALSE	/	FALSE	1421775499	plushContainerWidth	100%25
+ratsserver	FALSE	/owncloud	FALSE	1391367745	oc_remember_login	1
+#HttpOnly_ratsserver	FALSE	/owncloud	FALSE	1391367745	oc_token	6af1d095797d34aae07cee3c71c967f3
+ratsserver	FALSE	/owncloud	FALSE	1391367745	oc_username	matt

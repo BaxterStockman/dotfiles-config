@@ -1,0 +1,6 @@
+#
+# Set local tmux settings here
+#
+
+#set -g status-right-length 90
+#set -g status-right "#(conky -i 1 -c ~/.conkyrc.d/conky-tmux)"

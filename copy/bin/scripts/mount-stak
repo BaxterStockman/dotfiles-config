@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mount -t cifs -o username=schreibm,domain=engineering,uid=matt,gid=users //stak.engr.oregonstate.edu/students/s/schreibm $1

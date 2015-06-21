@@ -1,0 +1,34 @@
+g:*default
+-21 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard
+-20 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard
+-19 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard
+-18 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard Learn
+-17 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard Learn
+-16 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1&url=%2Fwebapps%2Fblackboard%2Fexecute%2Flauncher%3Ftype%3DCourse%26id%3D369172%26url%3D Blackboard Learn
+-15 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1&url=%2Fwebapps%2Fblackboard%2Fexecute%2Flauncher%3Ftype%3DCourse%26id%3D369172%26url%3D Blackboard Learn
+-14 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1&url=%2Fwebapps%2Fblackboard%2Fexecute%2Flauncher%3Ftype%3DCourse%26id%3D369172%26url%3D Blackboard Learn
+-13 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_1_1 Blackboard Learn
+-12 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard Learn
+-11 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1 Blackboard Learn
+-10 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_1_1 Blackboard Learn
+-9 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard Learn
+-8 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard Learn
+-7 https://my.oregonstate.edu/webapps/portal/frameset.jsp Blackboard Learn
+-6 https://ui.cloud.bb/profiles/me/edit?sid=ab3ecc9d-78a5-4203-b3f2-61338bf2f9fd&source=learn Edit My Blackboard Profile
+-5 https://my.oregonstate.edu/webapps/portal/frameset.jsp?url=%2Fwebapps%2Fbb-social-learning-bb_bb60%2Fexecute%2Fmybb%3Fcmd%3Ddisplay%26toolId%3DBB-CORE_____myProfile%26location%3Dhttps%253A%252F%252Fui.cloud.bb%252Fprofiles%252F52bdc33ae4b09192e560679a%253Fsid%253Dab3ecc9d-78a5-4203-b3f2-61338bf2f9fd Blackboard Learn
+-4 https://my.oregonstate.edu/webapps/portal/frameset.jsp?url=%2Fwebapps%2Fbb-social-learning-bb_bb60%2Fexecute%2Fmybb%3Fcmd%3Ddisplay%26toolId%3DBB-CORE_____myProfile%26location%3Dhttps%253A%252F%252Fui.cloud.bb%252Fprofiles%252F52bdc33ae4b09192e560679a%253Fsid%253Dab3ecc9d-78a5-4203-b3f2-61338bf2f9fd Blackboard Learn
+-3 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1 Blackboard Learn
+-2 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1&url=%2Fwebapps%2Fblackboard%2Fexecute%2Flauncher%3Ftype%3DCourse%26id%3D_369172_1%26url%3D Blackboard Learn
+-1 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1&url=%2Fwebapps%2Fblackboard%2Fexecute%2Flauncher%3Ftype%3DCourse%26id%3D_369172_1%26url%3D Blackboard Learn
+0|0 https://my.oregonstate.edu/webapps/portal/frameset.jsp?tab_tab_group_id=_2_1&url=%2Fwebapps%2Fblackboard%2Fexecute%2Flauncher%3Ftype%3DCourse%26id%3D_369172_1%26url%3D Blackboard Learn
+0|0 https://my.oregonstate.edu/bbcswebdav/pid-4269834-dt-content-rid-31208561_2/courses/CS_311_400_W2014/CS311-Homework3-2014-Winter%281%29.pdf 
+-3 https://piazza.com/class 
+-2 https://piazza.com/class/hpkbw91sckj3cr CS 311-400 (37 unread)
+-1 https://piazza.com/class/hpou0yu6gvl32q CS 361_400 (50 unread)
+0|0 https://piazza.com/class/hpou0yu6gvl32q?cid=54 Piazza @54
+-3 https://www.google.com/search?output=search&sclient=psy-ab&q=github&oq=&gs_l=&pbx=1 github - Google Search
+-2 https://github.com/ GitHub
+-1 https://github.com/BaxterStockman BaxterStockman
+0|0 https://github.com/BaxterStockman/dotfiles BaxterStockman/dotfiles
+-1 https://www.google.com/search?output=search&sclient=psy-ab&q=bash%20script%20here-document%20delimited%20by%20endo%20of%20file&oq=&gs_l=&pbx=1 bash script here-document delimited by endo of file - Google Search
+0|0 http://stackoverflow.com/questions/12503581/bash-warning-here-document-at-line-delimited-by-end-of-file-wanted-eof Bash: warning: here-document at line delimited by end-of-file (wanted `EOF') - Stack Overflow

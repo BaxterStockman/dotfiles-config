@@ -1,0 +1,10 @@
+URxvt.font:xft:inconsolata-g:style=medium:pixelsize=13
+URxvt.boldFont:xft:inconsolata-g:style=medium:pixelsize=13
+URxvt.italicFont:xft:inconsolata-g:style=medium:pixelsize=13
+URxvt.boldItalicFont:xft:inconsolata-g:style=medium:pixelsize=13
+
+! Corrects issue with infinality kerning
+! As recommended at https://bbs.archlinux.org/viewtopic.php?pid=1396477
+URxvt*letterSpace: -4.95
+
+! vim:ft=xdefaults

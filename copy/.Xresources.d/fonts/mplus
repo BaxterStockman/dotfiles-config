@@ -1,0 +1,6 @@
+xvt.font:xft:M+ 1m:style=regular:pixelsize=14
+URxvt.boldFont:xft:M+ 1m:style=bold:pixelsize=14
+URxvt.italicFont:xft:M+ 1m:style=regular:pixelsize=14
+URxvt.boldItalicFont:xft:M+ 1m:style=bold:pixelsize=14
+
+! vim:ft=xdefaults

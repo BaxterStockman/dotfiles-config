@@ -1,0 +1,10 @@
+set adblocker-filterlist /home/matt/.config/dwb/adblock_lists
+notify true
+set requestpolicy true
+adblock_subscribe
+open google.com
+erC
+Ss
+gs
+gs http://www.google.com
+set adblocker true

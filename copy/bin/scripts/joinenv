@@ -1,0 +1,7 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my @filtered = grep{ $_ !~ /TMUX/ } keys %ENV;
+print "@filtered";

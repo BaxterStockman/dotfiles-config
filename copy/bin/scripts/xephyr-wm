@@ -1,0 +1,13 @@
+#!/bin/sh
+
+GEO=$(xrandr --current | perl -ne '$. == 1 and /current\s+(\d+)\s+x\s+(\d+)/ and print "$1x$2"')
+XEPHYR_DISPLAY=":1"
+
+Xephyr $XEPHYR_DISPLAY -ac -geometry $GEO &
+
+export DISPLAY=$XEPHYR_DISPLAY
+
+xsetroot -display $XEPHYR_DISPLAY -solid black &
+gimp &
+exec twm
+

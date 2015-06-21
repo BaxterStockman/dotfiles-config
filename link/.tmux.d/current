@@ -1,0 +1,22 @@
+###############################################################################
+# 1.9 and later color options
+###############################################################################
+
+### Windows
+# fiddle with colors of inactive windows
+setw -gq window-status-style fg=colour244,bg=default,dim
+
+# change color of active window
+setw -gq window-status-current-style fg=colour166,bg=default,bright
+
+### Command line
+# set color of command line
+set -gq message-style fg=colour166,bg=colour235
+
+# fiddle with colors of status bar
+set -gq status-style fg=colour136,bg=colour235
+
+### Panes
+# set border style of regular and active panes
+set -gq pane-border-style fg=colour235
+set -gq pane-active-border-style fg=colour240

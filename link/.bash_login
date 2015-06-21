@@ -1,0 +1,26 @@
+# .bash_login -- bash initializations which only need to be done once.
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# .bash_login (template)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Copyright 2014, All Rights Reserved.
+# SiteSpect, Inc. - http://www.SiteSpect.com
+#
+# This file is part of the SiteSpect System, and may only be used under
+# the terms of the SiteSpect product license.  This source code may
+# not be viewed, modified or distributed without explicit permission
+# by SiteSpect, Inc.  By continuing to use this file, you indicate
+# that you have read your license and understand and accept it fully.
+#
+# This file is subject to non-disclosure and confidentiality agreements.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Exit if we're not in an ssh session
+[[ -n "$SSH_CONNECTION" ]] || return 1
+
+# Set up the terminal to behave properly on receipt of special characters
+stty erase ^?
+stty erase ^H
+stty susp ^Z
+stty intr ^C
+stty kill ^U
