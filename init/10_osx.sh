@@ -1,6 +1,12 @@
 # OSX-only stuff. Abort if not OSX.
 [[ "$OSTYPE" =~ ^darwin ]] || return 1
 
+# Ensure that we can actually, like, compile anything.
+if ! command -v gcc >/dev/null 2>&1; then
+    e_fatal "XCode or the Command Line Tools for XCode must be installed first." 1>&2
+    exit 1
+fi
+
 # Some tools look for XCode, even though they don't need it.
 # https://github.com/joyent/node/issues/3681
 # https://github.com/mxcl/homebrew/issues/10245
