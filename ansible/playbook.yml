@@ -1,15 +1,5 @@
 - hosts: all
-  vars:
-    - git_vendor_path: "{{ lookup('env', 'DOTFILES_ROOT') }}/vendor"
-  tasks:
-    - name: install git modules
-      git:
-        accept_hostkey: yes
-        dest: "{{ git_vendor_path }}/{{ item | basename | regex_replace('[.]git$', '') }}"
-        repo: "{{ item }}"
-        update: yes
-      with_items:
-        - git://github.com/rupa/z.git
-        - git://github.com/tj/git-extras.git
-        - git://github.com/petdance/ack2.git
-
+- include: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - default.yml

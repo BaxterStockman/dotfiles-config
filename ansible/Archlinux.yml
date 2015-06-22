@@ -1,0 +1,13 @@
+- hosts: all
+  tasks:
+    - name: install Arch Linux packages
+      sudo: true
+      pacman:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - vim
+        - tmux
+        - rxvt-unicode
+        - urxvt-perls
+
