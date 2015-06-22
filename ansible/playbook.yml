@@ -5,21 +5,11 @@
     - name: install git modules
       git:
         accept_hostkey: yes
-        #dest: "{{ git_vendor_path }}/{{ item | basename | regex_replace('\.git', '') }}"
-        dest: "{{ git_vendor_path }}/{{ item | basename }}"
+        dest: "{{ git_vendor_path }}/{{ item | basename | regex_replace('[.]git$', '') }}"
         repo: "{{ item }}"
         update: yes
       with_items:
-        #- git://github.com/sstephenson/rbenv.git
         - git://github.com/rupa/z.git
-        #- git://github.com/isaacs/nave.git
-        #- git://github.com/sstephenson/rbenv-vars.git
-        #- git://github.com/sstephenson/ruby-build.git
-        #- git://github.com/sstephenson/rbenv-default-gems.git
-        #- git://github.com/sstephenson/rbenv-gem-rehash.git
-        #- git://github.com/rkh/rbenv-whatis.git
-        #- git://github.com/rkh/rbenv-use.git
-        #- git://github.com/rkh/rbenv-update.git
         - git://github.com/tj/git-extras.git
         - git://github.com/petdance/ack2.git
 
