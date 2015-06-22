@@ -3,7 +3,7 @@
 header="Running deprecation checks"
 
 check () {
-    if [[ -z "$DOTFILES_OLD_VERSION" ]]; then
+    if [[ -z "${DOTFILES_OLD_VERSION:-}" ]]; then
         echo 'DOTFILES_OLD_VERSION is unset; cannot run deprecation checks'
         return 1
     fi
@@ -24,7 +24,7 @@ run () {
     comparison="$(compare_versions "$DOTFILES_OLD_VERSION" \
         "$srcfile_version")"
 
-    if (( comparison <= 0 )); then
+    if (( comparison < 0 )); then
         source "$srcfile"
     fi
 }
