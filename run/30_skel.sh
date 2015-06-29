@@ -14,7 +14,7 @@ check () {
     local destfile="$2"
 
     if [[ -e "$destfile" ]]; then
-        echo "destination file already exists"
-        return 1
+        echo "file exists"
+        return 2
     fi
 }

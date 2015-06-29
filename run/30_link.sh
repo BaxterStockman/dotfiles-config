@@ -10,10 +10,10 @@ check () {
 
     if [[ "${srcfile}" -ef "${destfile}" ]]; then
         echo "link already exists"
-        return 0
+        return 2
     fi
 
-    return 1
+    return 0
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

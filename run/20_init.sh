@@ -18,7 +18,7 @@ parseopts () {
         read opt_name opt_value _ <<<"$@"
             case "$opt_name" in
                 -V|--skip-vim-plugins)
-                    DOTFILES_SKIP_VIM_PLUGINS=true
+                    export DOTFILES_SKIP_VIM_PLUGINS=true
                     shift
                     ;;
             esac
