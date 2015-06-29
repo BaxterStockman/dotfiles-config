@@ -204,7 +204,7 @@ Plug 'vim-scripts/linediff.vim'
 Plug 'vim-scripts/matchit.zip'
 
 " Perl IDE
-Plug 'vim-scripts/perl-support.vim', {'for': 'perl'}
+"Plug 'vim-scripts/perl-support.vim', {'for': 'perl'}
 
 " Edit files using sudo or su or any other tool
 " No longer needed, since it's also in eunuch.vim
