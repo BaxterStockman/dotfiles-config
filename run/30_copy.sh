@@ -12,7 +12,7 @@ check () {
     local srcfile="$1"
     local destfile="$2"
 
-    if [[ -e "${destfile}" && ! "$(cmp "${srcfile}" "${destfile}" 2> /dev/null)" ]]; then
+    if [[ -e "${destfile}" && ! "$(md5cmp "${srcfile}" "${destfile}" 2> /dev/null)" ]]; then
         echo "same file"
         return 2
     elif [[ "$1" -ot "$2" ]]; then
