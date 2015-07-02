@@ -11,6 +11,9 @@ check () {
     if [[ "${srcfile}" -ef "${destfile}" ]]; then
         echo "link already exists"
         return 2
+    elif [[ -e "${destfile}" ]]; then
+	echo "something's already there"
+	return 1
     fi
 
     return 0
