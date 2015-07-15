@@ -20,7 +20,7 @@ if [ -f ~/.Xresources ]; then
     fi
 fi
 
-if command -p urxvtd &>/dev/null; then
+if command -v urxvtd >/dev/null 1>&2; then
     urxvtd -q -o -f
     # Set the value of 'i3-sensible-terminal' properly, so that it will spawn
     # an urxvt client rather than a new instance of the server, or a clone of
@@ -28,7 +28,7 @@ if command -p urxvtd &>/dev/null; then
     export TERMINAL=urxvtc
 fi
 
-if [ -n "$1"]; then
+if [ -n "$1" ]; then
     exec "$1"
 else
     exec i3
