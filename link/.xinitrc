@@ -29,9 +29,7 @@ if command -v urxvtd >/dev/null 2>&1; then
 fi
 
 if [ -n "$1" ]; then
-    echo ":: $(date) - Calling $1" >> ~/startx.log
     exec "$1"
 else
-    echo ":: $(date) - Calling i3" >> ~/startx.log
     exec i3
 fi
