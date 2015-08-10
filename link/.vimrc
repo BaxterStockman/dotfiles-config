@@ -73,23 +73,27 @@ silent! if plug#begin('~/.vim/plugged')
 " vim-plug - https://github.com/junegunn/vim-plug
 " Reload .vimrc and call :PlugInstall to install plugins
 
+Plug 'easymotion/vim-easymotion'
+
 " lean & mean status/tabline for vim that's light as air
 Plug 'bling/vim-airline'
 
 " Adds additional syntax highlighting and fixes for Ansible's dialect of YAML
-Plug 'chase/vim-ansible-yaml'
-
-" Fuzzy file, buffer, mru, tag, etc finder
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'chase/vim-ansible-yaml', {'for': 'yaml'}
 
 " A collection of vimscripts for Haskell development
-Plug 'dag/vim2hs'
+Plug 'dag/vim2hs', {'for': 'haskell'}
+
+"Plug 'dync/ctrlsf.vim'
 
 " A completion plugin for Haskell, using ghc-mod
-Plug 'eagletmt/neco-ghc'
+Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 
 " Happy Haskell programming on Vim, powered by ghc-mod
-Plug 'eagletmt/ghcmod-vim'
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
+
+" A command-line fuzzy finder written in Go
+Plug 'junegunn/fzf', {'do': 'yes \| ./install'}
 
 " Go development plugin for Vim
 Plug 'fatih/vim-go', {'for': 'go'}
@@ -109,18 +113,16 @@ Plug 'junegunn/seoul256.vim'
 " Vim python-mode.  PyLint, Rope, Pydoc, breakpoints from box
 Plug 'klen/python-mode', {'for': 'python'}
 
-" Show a diff via Vim sign column
-Plug 'mhinz/vim-signify'
-
 if v:version >= 703
-	" a vim plugin to display the indentation levels with thin vertical
-	" lines
-	Plug 'Yggdroot/indentLine'
-	"Plug 'Yggdroot/indentLine', {'on': 'IndentLinesEnable'}
+    " Show a diff via Vim sign column
+    Plug 'mhinz/vim-signify'
+
+    " a vim plugin to display the indentation levels with thin vertical
+    " lines
+    Plug 'Yggdroot/indentLine', {'on': 'IndentLinesEnable'}
 else
-	" A Vim plugin for visually displaying indent levels in code
-	Plug 'nathanaelkane/vim-indent-guides'
-	"Plug 'nathanaelkane/vim-indent-guides', {'on': 'IndentGuidesOn'}
+    " A Vim plugin for visually displaying indent levels in code
+    Plug 'nathanaelkane/vim-indent-guides', {'on': 'IndentGuidesOn'}
 endif
 
 " Vastly improved Javascript indentation and syntax support in Vim
@@ -134,9 +136,9 @@ Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'Raimondi/delimitMate'
 
 " A tree explorer plugin for vim
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
 
-" A tree explorer plugin for vim
+" Syntax checking hacks for vim
 Plug 'scrooloose/syntastic'
 
 " True Sublime Text style multiple selections for Vim
@@ -158,11 +160,14 @@ Plug 'tpope/vim-repeat'
 " Defaults everyone can agree on
 Plug 'tpope/vim-sensible'
 
-" Defaults everyone can agree on
-"Plug 'tpope/vim-sleuth'
+" Heuristically set buffer options
+Plug 'tpope/vim-sleuth'
 
 " Quoting/parenthesizing made simple
 Plug 'tpope/vim-surround'
+
+" tmux basics
+Plug 'tpope/vim-tbone'
 
 " Pairs of handy bracket mappings
 Plug 'tpope/vim-unimpaired'
@@ -170,11 +175,8 @@ Plug 'tpope/vim-unimpaired'
 " Combine with netrw to create a delicious salad dressing
 Plug 'tpope/vim-vinegar'
 
-" surround.vim: quoting/parenthesizing made simple
-Plug 'tpope/vim-surround'
-
 " kickstart.vim provides syntax highligting for RedHat Linux kickstart files
-Plug 'tangledhelix/vim-kickstart'
+Plug 'tangledhelix/vim-kickstart', {'for': 'kickstart'}
 
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh'}
 autocmd! User YouCompleteMe call youcompleteme#Enable()
