@@ -56,3 +56,5 @@ function alias_if() {
 }
 
 src_all "$CONFIG_PATH"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

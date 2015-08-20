@@ -5,8 +5,8 @@
 
 # Other aliases
 alias cower='cower --color=auto'
-alias packauto='packer -Syu --noedit --noconfirm'
-alias packquery='pacman -Q | grep'
+alias packauto='packer --noedit --noconfirm'
+alias packquery=' pacman -Q | grep'
 
 ## Privileged access
 if [ $UID -ne 0 ]; then
