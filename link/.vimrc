@@ -77,19 +77,19 @@ silent! if plug#begin('~/.vim/plugged')
 Plug 'bling/vim-airline'
 
 " Adds additional syntax highlighting and fixes for Ansible's dialect of YAML
-Plug 'chase/vim-ansible-yaml'
+Plug 'chase/vim-ansible-yaml', {'for': ['ansible', 'yaml']}
 
 " Fuzzy file, buffer, mru, tag, etc finder
 Plug 'ctrlpvim/ctrlp.vim'
 
 " A collection of vimscripts for Haskell development
-Plug 'dag/vim2hs'
+Plug 'dag/vim2hs', {'for': 'haskell'}
 
 " A completion plugin for Haskell, using ghc-mod
-Plug 'eagletmt/neco-ghc'
+Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 
 " Happy Haskell programming on Vim, powered by ghc-mod
-Plug 'eagletmt/ghcmod-vim'
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 
 " Go development plugin for Vim
 Plug 'fatih/vim-go', {'for': 'go'}
@@ -110,7 +110,7 @@ Plug 'junegunn/seoul256.vim'
 Plug 'klen/python-mode', {'for': 'python'}
 
 " Show a diff via Vim sign column
-Plug 'mhinz/vim-signify'
+"Plug 'mhinz/vim-signify'
 
 if v:version >= 703
 	" a vim plugin to display the indentation levels with thin vertical
@@ -161,7 +161,7 @@ Plug 'tpope/vim-sensible'
 " Defaults everyone can agree on
 "Plug 'tpope/vim-sleuth'
 
-" Quoting/parenthesizing made simple
+" surround.vim: quoting/parenthesizing made simple
 Plug 'tpope/vim-surround'
 
 " Pairs of handy bracket mappings
@@ -170,11 +170,8 @@ Plug 'tpope/vim-unimpaired'
 " Combine with netrw to create a delicious salad dressing
 Plug 'tpope/vim-vinegar'
 
-" surround.vim: quoting/parenthesizing made simple
-Plug 'tpope/vim-surround'
-
 " kickstart.vim provides syntax highligting for RedHat Linux kickstart files
-Plug 'tangledhelix/vim-kickstart'
+Plug 'tangledhelix/vim-kickstart', {'for': 'kickstart'}
 
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh'}
 autocmd! User YouCompleteMe call youcompleteme#Enable()
@@ -190,12 +187,12 @@ Plug 'vim-perl/vim-perl', {
 Plug 'vim-scripts/cmdalias.vim'
 
 " C/C++ IDE
-Plug 'vim-scripts/c.vim'
+Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
 
 " jQuery IDE
-Plug 'vim-scripts/jQuery'
+Plug 'vim-scripts/jQuery', {'for': 'javascript'}
 
-Plug 'vim-scripts/LaTeX-Box'
+Plug 'vim-scripts/LaTeX-Box', {'for': 'plaintex'}
 
 " Perform an interactive diff on two blocks of text
 Plug 'vim-scripts/linediff.vim'
