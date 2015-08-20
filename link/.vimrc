@@ -750,7 +750,10 @@ let g:syntastic_check_on_open = 1
 " Aggregate errors/warnings from all enabled checkers
 let g:syntastic_aggregate_errors = 1
 
-let g:syntastic_perl_checkers = ['perl', 'perlcritic']
+" perlcritic is very slow!
+"let g:syntastic_perl_checkers = ['perl', 'perlcritic']
+let g:syntastic_perl_checkers = ['perl']
+
 " Could be dangerous to use this when checking third-party files...
 let g:syntastic_enable_perl_checker = 1
 
