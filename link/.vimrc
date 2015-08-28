@@ -79,7 +79,10 @@ Plug 'easymotion/vim-easymotion'
 Plug 'bling/vim-airline'
 
 " Adds additional syntax highlighting and fixes for Ansible's dialect of YAML
-Plug 'chase/vim-ansible-yaml', {'for': 'yaml'}
+Plug 'chase/vim-ansible-yaml', {'for': ['ansible', 'yaml']}
+
+" Fuzzy file, buffer, mru, tag, etc finder
+Plug 'ctrlpvim/ctrlp.vim'
 
 " A collection of vimscripts for Haskell development
 Plug 'dag/vim2hs', {'for': 'haskell'}
@@ -163,7 +166,7 @@ Plug 'tpope/vim-sensible'
 " Heuristically set buffer options
 Plug 'tpope/vim-sleuth'
 
-" Quoting/parenthesizing made simple
+" surround.vim: quoting/parenthesizing made simple
 Plug 'tpope/vim-surround'
 
 " tmux basics
@@ -192,12 +195,12 @@ Plug 'vim-perl/vim-perl', {
 Plug 'vim-scripts/cmdalias.vim'
 
 " C/C++ IDE
-Plug 'vim-scripts/c.vim'
+Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
 
 " jQuery IDE
-Plug 'vim-scripts/jQuery'
+Plug 'vim-scripts/jQuery', {'for': 'javascript'}
 
-Plug 'vim-scripts/LaTeX-Box'
+Plug 'vim-scripts/LaTeX-Box', {'for': 'plaintex'}
 
 " Perform an interactive diff on two blocks of text
 Plug 'vim-scripts/linediff.vim'
@@ -747,7 +750,10 @@ let g:syntastic_check_on_open = 1
 " Aggregate errors/warnings from all enabled checkers
 let g:syntastic_aggregate_errors = 1
 
-let g:syntastic_perl_checkers = ['perl', 'perlcritic']
+" perlcritic is very slow!
+"let g:syntastic_perl_checkers = ['perl', 'perlcritic']
+let g:syntastic_perl_checkers = ['perl']
+
 " Could be dangerous to use this when checking third-party files...
 let g:syntastic_enable_perl_checker = 1
 
