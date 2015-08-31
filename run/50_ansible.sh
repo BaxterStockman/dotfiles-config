@@ -1,5 +1,3 @@
-# XXX testing.
-return
 #!/usr/bin/env bash
 
 header="Running ansible-playbook in local mode"
