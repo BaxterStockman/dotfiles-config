@@ -496,7 +496,7 @@ set shell=/bin/bash
 " =============================================================================
 augroup vimrc
     " Automatically detect filetype upon :w
-    autocmd BufRead,BufWrite,BufWritePost * :filetype detect
+    autocmd BufRead,BufWrite,BufWritePost * if !exists("&ft") | :filetype detect | endif
 
     " Set Rexfiles to use Perl syntax
     autocmd BufRead,BufWrite,BufWritePost,BufNewFile Rexfile set filetype=perl
