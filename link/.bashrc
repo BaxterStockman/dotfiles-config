@@ -19,7 +19,7 @@ export PATH
 export LD_LIBRARY_PATH
 
 # Source all files in a directory
-source_al l() {
+source_all () {
     local path="$1"
 
     local f

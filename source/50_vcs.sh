@@ -2,6 +2,8 @@
 
 # Git shortcuts
 
+command -v hub &>/dev/null && alias git=hub
+
 alias g='git'
 function ga() { git add "${@:-.}"; } # Add all files by default
 alias gp='git push'
