@@ -718,6 +718,11 @@ let perl_extended_vars = 1
 " Deals with temporary hang when saving python files
 let g:pymode_rope_lookup_project = 0
 
+" Set docs off
+"let g:pymode_doc = 0
+" Don't let python mode override my 'K' binding
+let g:pymode_doc_bind = '<leader>K'
+
 " vim-indent-guides
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
