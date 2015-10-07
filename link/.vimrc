@@ -496,7 +496,7 @@ set shell=/bin/bash
 " =============================================================================
 augroup vimrc
     " Automatically detect filetype upon :w
-    autocmd BufRead,BufWrite,BufWritePost * :filetype detect
+    autocmd BufRead,BufWrite,BufWritePost * if !exists("&ft") | :filetype detect | endif
 
     " Set Rexfiles to use Perl syntax
     autocmd BufRead,BufWrite,BufWritePost,BufNewFile Rexfile set filetype=perl
@@ -717,6 +717,11 @@ let perl_extended_vars = 1
 
 " Deals with temporary hang when saving python files
 let g:pymode_rope_lookup_project = 0
+
+" Set docs off
+"let g:pymode_doc = 0
+" Don't let python mode override my 'K' binding
+let g:pymode_doc_bind = '<leader>K'
 
 " vim-indent-guides
 let g:indent_guides_start_level = 2

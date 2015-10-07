@@ -36,7 +36,7 @@ if [[ -n $TMUX ]]; then
             # parameters that the 'export' builtin was invoked with.
             trimmed_item="${item##-* }"
 
-	    var="${trimmed_item%%=*}"
+            var="${trimmed_item%%=*}"
             val="${trimmed_item#*=}"
 
             if "${noexport["$var"]:-false}"; then
@@ -46,7 +46,7 @@ if [[ -n $TMUX ]]; then
             # For the case 'export SOMEVAR'
             [[ "$val" == "$var" ]] && val="${!var}"
 
-            tmux setenv "$var" "$val"
+            command tmux setenv "$var" "$val"
         done
     }
 
@@ -55,11 +55,11 @@ if [[ -n $TMUX ]]; then
         builtin unset "$@"
 
         for item in "${argv[@]}"; do
-            # Remove the longest substring between the beginning of a flag and a
-            # space character.  This should remove all but the positional
+            [[ "$item" == -* ]] && continue
+            # Remove the longest substring between the beginning of a flag and
+            # a space character.  This should remove all but the positional
             # parameters that the 'unset' builtin was invoked with.
-            item=${item##-* }
-            #tmux setenv -u "$item"
+            command tmux setenv -ur "$item"
         done
     }
 fi
