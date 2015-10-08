@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Where local modules should go.
-eval "$(env_unshift ANSIBLE_LIBRARY "${HOME}/.ansible/modules.d")"
+#eval "$(env_unshift ANSIBLE_LIBRARY "${HOME}/.ansible/library")"
 
 # A tiny li'l wrapper function that helps set roles up the way I like.
 ansible-galaxy () {
@@ -35,6 +35,8 @@ ansible-galaxy () {
 # Make it easy to run sample playbook from repository root
 roles_path = ..
 inventory = hosts
+library = ~/.ansible/library
+action_modules = ~/.ansible/modules/action_modules
 " > "$ansible_cfg"
 
             [[ -e "$inventory" ]] || printf '%s' "\
