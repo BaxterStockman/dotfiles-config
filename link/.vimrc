@@ -127,9 +127,9 @@ else
     " A Vim plugin for visually displaying indent levels in code
     Plug 'nathanaelkane/vim-indent-guides'
 
-    command! IndentGuidesToggle  IndentLinesToggle
-    command! IndentGuidesEnable  IndentLinesEnable
-    command! IndentGuidesDisable IndentGuidesDisable
+    command! IndentLinesToggle  IndentGuidesToggle
+    command! IndentLinesEnable  IndentGuidesEnable
+    command! IndentLinesDisable IndentGuidesDisable
 endif
 
 " Vastly improved Javascript indentation and syntax support in Vim
