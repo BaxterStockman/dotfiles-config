@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-if [[ -d ~/.xsessions && -d /usr/share/xsessions ]]; then
-  for f in /usr/share/xsessions/*; do
-      base=${f##*/}
-      [[ -h ~/.xsessions/$base ]] || ln -s $f ~/.xsessions/$base
-  done
-  unset f
-fi

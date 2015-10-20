@@ -1,7 +1,0 @@
-#!/bin/bash
-
-dead_sessions=`tmux ls | grep -v attached | awk '{print $1}' | sed 's/:$//' | egrep [[:digit:]]+$`
-
-for session in $dead_sessions; do
-    tmux kill-session -t $session
-done

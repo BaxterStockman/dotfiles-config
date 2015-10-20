@@ -1,12 +1,12 @@
-#!/bin/bash
-IN="DVI-I-1"
-EXT="DVI-D-0"
-#IN_MODE="1920x1080"
+#!/usr/bin/env bash
 
-if [[ -n `xrandr | grep "$EXT disconnected"` ]]; then
-    xrandr --output $IN --auto --primary --output $EXT --off
+: "${PRIMARY:=DVI-I-1}"
+: "${EXT:=DVI-D-0}"
+
+if (( $(xrandr | grep -cf "${EXT} disconnected") )); then
+    xrandr --output "${PRIMARY}" --auto --primary --output "${EXT}" --off
 else
-    xrandr --output $IN --auto --primary --output $EXT --auto --right-of $IN
+    xrandr --output "${PRIMARY}" --auto --primary --output "${EXT}" --auto --right-of "${PRIMARY}"
 fi
 
 

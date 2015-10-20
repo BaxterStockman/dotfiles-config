@@ -1,5 +1,5 @@
 #!/bin/sh
 
-ratpoison -c "setenv fs1 `ratpoison -c 'fdump'`"
+ratpoison -c "setenv fs1 $(ratpoison -c 'fdump')"
 ratpoison -c "source $HOME/.ratpoisonrc"
-ratpoison -c "frestore `ratpoison -c 'getenv fs1'`"
+ratpoison -c "frestore $(ratpoison -c 'getenv fs1')"

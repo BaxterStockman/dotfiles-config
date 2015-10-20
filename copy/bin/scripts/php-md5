@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-echo `php -r "echo md5('$1');"`
