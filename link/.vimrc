@@ -96,7 +96,7 @@ Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 
 " A command-line fuzzy finder written in Go
-Plug 'junegunn/fzf', {'do': 'yes \| ./install'}
+Plug 'junegunn/fzf', {'do': 'yes \| ./install --no-update-rc'}
 
 " Go development plugin for Vim
 Plug 'fatih/vim-go', {'for': 'go'}
@@ -719,7 +719,7 @@ let perl_extended_vars = 1
 let g:pymode_rope_lookup_project = 0
 
 " Set docs off
-"let g:pymode_doc = 0
+let g:pymode_doc = 0
 " Don't let python mode override my 'K' binding
 let g:pymode_doc_bind = '<leader>K'
 
