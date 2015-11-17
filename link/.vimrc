@@ -122,10 +122,14 @@ if v:version >= 703
 
     " a vim plugin to display the indentation levels with thin vertical
     " lines
-    Plug 'Yggdroot/indentLine', {'on': 'IndentLinesEnable'}
+    Plug 'Yggdroot/indentLine'
 else
     " A Vim plugin for visually displaying indent levels in code
-    Plug 'nathanaelkane/vim-indent-guides', {'on': 'IndentGuidesOn'}
+    Plug 'nathanaelkane/vim-indent-guides'
+
+    command! IndentLinesToggle  IndentGuidesToggle
+    command! IndentLinesEnable  IndentGuidesEnable
+    command! IndentLinesDisable IndentGuidesDisable
 endif
 
 " Vastly improved Javascript indentation and syntax support in Vim
