@@ -14,10 +14,10 @@ check () {
 
     if [[ -e "${destfile}" && ! "$(md5cmp "${srcfile}" "${destfile}" 2> /dev/null)" ]]; then
         echo "same file"
-        return 2
+        return "$DOTFILES_EX_TEMPFAIL"
     elif [[ "$1" -ot "$2" ]]; then
         echo "destination file newer"
-        return 1
+        return "$DOTFILES_EX_FAIL"
     fi
 
     return 0
@@ -33,16 +33,16 @@ run () {
     local destdir="${destfile%/*}"
 
     if ! mkdir -p "$destdir" >/dev/null; then
-        e_error "Can't copy ${srcfile} to ${destfile}"
-        return 1
+        e_error "Can't copy ${srcfile} to ${destfile} - failed to create ${destdir}"
+        return "$DOTFILES_EX_CANTCREAT"
     fi
 
     if ! cp "$srcfile" "$destfile"; then
         e_error "Failed to copy ${srcfile} to ${destfile}"
-        return 1
+        return "$DOTFILES_EX_CANTCREAT"
     else
         e_success "Copied ${srcfile} to ${destfile}"
-        return 0
+        return "$DOTFILES_EX_OK"
     fi
 }
 
