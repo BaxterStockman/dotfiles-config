@@ -49,13 +49,7 @@ install:
     - pip install ansible
 
 before_script:
-    # Ensure that Ansible recognizes the short-form role name, rather than the
-    # name of the GitHub repo.  For instance, $PWD/../ansible-role-nginx gets
-    # symlinked to $PWD/../nginx so the playbook can contain "role: nginx".
-    - >
-        bash -c '\''basename="${PWD##*/}" ; \
-            role_name="${basename##*-}" ; \
-            ln -sf "$basename" ../"$role_name"'\''
+    - .travis/before_script.sh
 
 script:
     # Check syntax
@@ -75,6 +69,27 @@ script:
         fi
 '
 
+printf -v before_script '%s' '
+#!/usr/bin/env bash
+
+# Ensure that Ansible recognizes the short-form role name, rather than the
+# name of the GitHub repo.  For instance, $PWD/../ansible-role-nginx gets
+# symlinked to $PWD/../nginx so the playbook can contain "role: nginx".
+: "${DESTDIR:="$PWD"}"
+
+DESTDIR="$(readlink -m "$DESTDIR")"
+
+mkdir -p "$DESTDIR"
+
+dirname="${DESTDIR%/*}"
+
+if [[ -z "$ROLE_NAME" ]]; then
+    ROLE_NAME="${DESTDIR##*-}"
+fi
+
+ln -sf "$DESTDIR" "${dirname}/${ROLE_NAME}"
+'
+
 write_files () {
     local role_name="$1"
     shift
@@ -84,10 +99,14 @@ write_files () {
     local ansible_cfg_path="${init_path}/${role_name}/ansible.cfg"
     local inventory_path="${init_path}/${role_name}/hosts"
     local travis_yml_path="${init_path}/${role_name}/.travis.yml"
+    local before_script_path="${init_path}/${role_name}/.travis/before_script.sh"
+
+    mkdir -p "${before_script_path%/*}"
 
     [[ -e "$ansible_cfg_path" ]] || (IFS=$'\n'; echo "${ansible_cfg[*]}" >> "$ansible_cfg_path")
     [[ -e "$inventory_path" ]] || echo "$inventory" >> "$inventory_path"
     [[ -e "$travis_yml_path" ]] || echo "$travis_yml" >> "$travis_yml_path"
+    [[ -e "$before_script_path" ]] || echo "$before_script" >> "$before_script_path"
 }
 
 # A tiny li'l wrapper function that helps set roles up the way I like.
