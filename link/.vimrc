@@ -148,6 +148,9 @@ Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
 " Syntax checking hacks for vim
 Plug 'scrooloose/syntastic'
 
+" Interactive command execution in Vim
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
+
 " True Sublime Text style multiple selections for Vim
 Plug 'terryma/vim-multiple-cursors'
 
