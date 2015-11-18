@@ -13,15 +13,13 @@ run () {
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 parseopts () {
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    local opt_name opt_value
     while (( $# )); do
-        read opt_name opt_value _ <<<"$@"
-            case "$opt_name" in
-                -V|--skip-vim-plugins)
-                    export DOTFILES_SKIP_VIM_PLUGINS=1
-                    shift
-                    ;;
-            esac
+        case "$1" in
+            -V|--skip-vim-plugins)
+                export DOTFILES_SKIP_VIM_PLUGINS=1
+                shift
+                ;;
+        esac
     done
 }
 

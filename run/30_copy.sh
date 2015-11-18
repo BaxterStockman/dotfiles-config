@@ -12,14 +12,16 @@ check () {
     local srcfile="$1"
     local destfile="$2"
 
-    if [[ -e "${destfile}" && ! "$(md5cmp "${srcfile}" "${destfile}" 2> /dev/null)" ]]; then
-        echo "same file"
-        return "$DOTFILES_EX_TEMPFAIL"
-    elif [[ "$1" -ot "$2" ]]; then
-        echo "destination file newer"
-        return "$DOTFILES_EX_FAIL"
+    if [[ -e "${destfile}" ]]; then
+        md5cmp "${srcfile}" "${destfile}"
+        if md5cmp "${srcfile}" "${destfile}"; then
+            echo "same file"
+            return "$DOTFILES_EX_TEMPFAIL"
+        elif [[ "${srcfile}" -ot "${destfile}" ]]; then
+            echo "destination file newer"
+            return "$DOTFILES_EX_TEMPFAIL"
+        fi
     fi
-
     return 0
 }
 

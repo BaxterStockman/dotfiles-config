@@ -6,6 +6,9 @@
 umask 022
 
 # Fast directory switching
-export _Z_NO_PROMPT_COMMAND=1
-export _Z_DATA="${DOTFILES_CACHES_PATH}/.z"
-source ~/.dotfiles/vendor/z/z.sh
+if [[ -r ~/.dotfiles/vendor/z/z.sh ]]; then
+    export _Z_NO_PROMPT_COMMAND=1
+    export _Z_DATA="${HOME}/.z/cache"
+    mkdir -p "${_Z_DATA}"
+    source ~/.dotfiles/vendor/z/z.sh
+fi
