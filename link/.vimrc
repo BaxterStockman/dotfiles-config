@@ -96,7 +96,7 @@ Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 
 " A command-line fuzzy finder written in Go
-Plug 'junegunn/fzf', {'do': 'yes \| ./install'}
+Plug 'junegunn/fzf', {'do': 'yes \| ./install --no-update-rc'}
 
 " Go development plugin for Vim
 Plug 'fatih/vim-go', {'for': 'go'}
@@ -122,10 +122,14 @@ if v:version >= 703
 
     " a vim plugin to display the indentation levels with thin vertical
     " lines
-    Plug 'Yggdroot/indentLine', {'on': 'IndentLinesEnable'}
+    Plug 'Yggdroot/indentLine'
 else
     " A Vim plugin for visually displaying indent levels in code
-    Plug 'nathanaelkane/vim-indent-guides', {'on': 'IndentGuidesOn'}
+    Plug 'nathanaelkane/vim-indent-guides'
+
+    command! IndentLinesToggle  IndentGuidesToggle
+    command! IndentLinesEnable  IndentGuidesEnable
+    command! IndentLinesDisable IndentGuidesDisable
 endif
 
 " Vastly improved Javascript indentation and syntax support in Vim
@@ -143,6 +147,9 @@ Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
 
 " Syntax checking hacks for vim
 Plug 'scrooloose/syntastic'
+
+" Interactive command execution in Vim
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
 
 " True Sublime Text style multiple selections for Vim
 Plug 'terryma/vim-multiple-cursors'
@@ -719,7 +726,7 @@ let perl_extended_vars = 1
 let g:pymode_rope_lookup_project = 0
 
 " Set docs off
-"let g:pymode_doc = 0
+let g:pymode_doc = 0
 " Don't let python mode override my 'K' binding
 let g:pymode_doc_bind = '<leader>K'
 

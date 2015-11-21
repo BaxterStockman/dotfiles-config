@@ -12,14 +12,16 @@ check () {
     local srcfile="$1"
     local destfile="$2"
 
-    if [[ -e "${destfile}" && ! "$(md5cmp "${srcfile}" "${destfile}" 2> /dev/null)" ]]; then
-        echo "same file"
-        return 2
-    elif [[ "$1" -ot "$2" ]]; then
-        echo "destination file newer"
-        return 1
+    if [[ -e "${destfile}" ]]; then
+        md5cmp "${srcfile}" "${destfile}"
+        if md5cmp "${srcfile}" "${destfile}"; then
+            echo "same file"
+            return "$DOTFILES_EX_TEMPFAIL"
+        elif [[ "${srcfile}" -ot "${destfile}" ]]; then
+            echo "destination file newer"
+            return "$DOTFILES_EX_TEMPFAIL"
+        fi
     fi
-
     return 0
 }
 
@@ -33,16 +35,16 @@ run () {
     local destdir="${destfile%/*}"
 
     if ! mkdir -p "$destdir" >/dev/null; then
-        e_error "Can't copy ${srcfile} to ${destfile}"
-        return 1
+        e_error "Can't copy ${srcfile} to ${destfile} - failed to create ${destdir}"
+        return "$DOTFILES_EX_CANTCREAT"
     fi
 
     if ! cp "$srcfile" "$destfile"; then
         e_error "Failed to copy ${srcfile} to ${destfile}"
-        return 1
+        return "$DOTFILES_EX_CANTCREAT"
     else
         e_success "Copied ${srcfile} to ${destfile}"
-        return 0
+        return "$DOTFILES_EX_OK"
     fi
 }
 

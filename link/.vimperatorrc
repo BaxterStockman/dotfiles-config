@@ -93,7 +93,7 @@ set hlsearch
 "" typically (see below) ignore case
 set ignorecase
 "" only consider case if an upper case char is used
-set smartcase
+"set smartcase
 
 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

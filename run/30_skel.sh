@@ -15,6 +15,6 @@ check () {
 
     if [[ -e "$destfile" ]]; then
         echo "file exists"
-        return 2
+        return "$DOTFILES_EX_TEMPFAIL"
     fi
 }

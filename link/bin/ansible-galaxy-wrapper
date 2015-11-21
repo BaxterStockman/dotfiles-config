@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+
+declare -a ansible_cfg=(
+    '[defaults]'
+    'roles_path = ..'
+    'inventory = hosts'
+    'library = ~/.ansible/library'
+)
+
+for plugin_type in action callback connection filter lookup vars; do
+    plugin_relpath="${plugin_type}_plugins"
+    ansible_cfg+=("$plugin_relpath = ${plugin_relpath}:~/.ansible/plugins/${plugin_relpath}")
+done
+
+printf -v inventory '%s' '
+[arch]
+
+[local]
+localhost
+
+[test]
+travis
+
+[arch:children]
+local
+
+[arch:vars]
+ansible_python_interpreter = /usr/bin/python2
+
+[local:vars]
+ansible_connection = local
+
+[test:vars]
+ansible_host = 127.0.0.1
+ansible_connection = local
+'
+
+printf -v travis_yml '%s' '
+---
+language: python
+python: "2.7"
+
+env:
+    - SITE=playbook.yml
+
+install:
+    # Install ansible
+    - pip install --upgrade pip
+    - pip install ansible
+
+before_script:
+    - .travis/before_script.sh
+
+script:
+    # Check syntax
+    - "ansible-playbook -l travis test/$SITE --syntax-check"
+
+    # Run the role/playbook with ansible-playbook
+    - "ansible-playbook -l travis test/$SITE"
+
+    # Run the role/playbook again, checking for idempotence
+    - >
+        if ansible-playbook -l travis test/$SITE | grep -q "changed=0.*failed=0"; then
+            echo "Idempotence test: pass"
+            exit 0
+        else
+            echo "Idempotence test: fail"
+            exit 1
+        fi
+'
+
+printf -v before_script '%s' '
+#!/usr/bin/env bash
+
+# Ensure that Ansible recognizes the short-form role name, rather than the
+# name of the GitHub repo.  For instance, $PWD/../ansible-role-nginx gets
+# symlinked to $PWD/../nginx so the playbook can contain "role: nginx".
+: "${DESTDIR:="$PWD"}"
+
+DESTDIR="$(readlink -m "$DESTDIR")"
+
+mkdir -p "$DESTDIR"
+
+dirname="${DESTDIR%/*}"
+
+if [[ -z "$ROLE_NAME" ]]; then
+    ROLE_NAME="${DESTDIR##*-}"
+fi
+
+ln -sf "$DESTDIR" "${dirname}/${ROLE_NAME}"
+'
+
+write_files () {
+    local role_name="$1"
+    shift
+    local init_path="${init_path:-"$PWD"}"
+    shift
+
+    local ansible_cfg_path="${init_path}/${role_name}/ansible.cfg"
+    local inventory_path="${init_path}/${role_name}/hosts"
+    local travis_yml_path="${init_path}/${role_name}/.travis.yml"
+    local before_script_path="${init_path}/${role_name}/.travis/before_script.sh"
+
+    mkdir -p "${before_script_path%/*}"
+
+    [[ -e "$ansible_cfg_path" ]] || (IFS=$'\n'; echo "${ansible_cfg[*]}" >> "$ansible_cfg_path")
+    [[ -e "$inventory_path" ]] || echo "$inventory" >> "$inventory_path"
+    [[ -e "$travis_yml_path" ]] || echo "$travis_yml" >> "$travis_yml_path"
+    [[ -e "$before_script_path" ]] || echo "$before_script" >> "$before_script_path"
+}
+
+# A tiny li'l wrapper function that helps set roles up the way I like.
+ansible_galaxy () {
+    command ansible-galaxy "$@"
+    local -i exit_code=$?
+    (( exit_code == 0 )) || return $exit_code
+
+    case "$1" in
+        init)
+            local -i i
+            local init_path=''
+            local opt=''
+            for (( i = 2 ; i <= $# ; i++ )); do
+                opt="${!i}"
+                if [[ "${opt}" == -h ]] || [[ "${opt}" == --help ]]; then
+                    return $exit_code
+                fi
+                if [[ "${opt}" == -p ]] || [[ "${opt}" == --init-path ]]; then
+                    ((i++))
+                    init_path="${!i}"
+                fi
+            done
+
+            local role_name="${*:$#:1}"
+
+            write_files "$role_name" "$init_path"
+
+            ;;
+        *)
+            # Anything besides 'init' is ignored.
+            :
+            ;;
+    esac
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    ansible_galaxy "$@"
+fi
