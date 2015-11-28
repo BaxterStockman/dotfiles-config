@@ -798,4 +798,5 @@ augroup vimrc
 	autocmd VimEnter,BufEnter,BufNewFile call SourceLocal()
 augroup END
 
+set conceallevel=0
 call SourceLocal()
