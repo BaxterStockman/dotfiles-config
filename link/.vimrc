@@ -342,6 +342,9 @@ endif
 " Visual settings
 " =============================================================================
 
+" Don't allow syntax plugins to conceal text
+set conceallevel=0
+
 " Show the current line
 "set cursorline
 
