@@ -70,6 +70,8 @@ endif
 " Load plugins
 silent! if plug#begin('~/.vim/plugged')
 
+Plug 'tpope/vim-markdown'
+
 " vim-plug - https://github.com/junegunn/vim-plug
 " Reload .vimrc and call :PlugInstall to install plugins
 
@@ -83,7 +85,7 @@ Plug 'chase/vim-ansible-yaml'
 Plug 'ctrlpvim/ctrlp.vim'
 
 " A collection of vimscripts for Haskell development
-Plug 'dag/vim2hs'
+"Plug 'dag/vim2hs'
 
 " A completion plugin for Haskell, using ghc-mod
 Plug 'eagletmt/neco-ghc'
@@ -185,6 +187,9 @@ Plug 'vim-perl/vim-perl', {
     \   'perl',
     \ 'do':
     \   'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+
+" Ruby support
+Plug 'vim-ruby/vim-ruby'
 
 " Create aliases for Vim commands
 Plug 'vim-scripts/cmdalias.vim'
@@ -492,6 +497,9 @@ set shell=/bin/bash
 augroup vimrc
     " Automatically detect filetype upon :w
     autocmd BufRead,BufWrite,BufWritePost * :filetype detect
+
+    " Vim sets *.md files to Modula2 syntax
+    autocmd BufRead,BufWrite,BufWritePost *.md set filetype=markdown
 
     " Set Rexfiles to use Perl syntax
     autocmd BufRead,BufWrite,BufWritePost,BufNewFile Rexfile set filetype=perl
