@@ -1,30 +1,100 @@
 #!/usr/bin/env bash
 
-# From http://stackoverflow.com/questions/370047/#370255
-path_remove () {
-    local IFS=:
-    # convert it to an array
-    local path_elems=($PATH)
+sv_remove () {
+    local char="$1"
+    shift
+    local varname="$1"
+    shift
+
+
+    # Convert $char-separated variable to an array
+    local IFS=$char
+    local elems=(${!varname})
     unset IFS
-    # perform any array operations to remove elements from the array
+
+    # Remove any unwanted elements from the array
     for to_remove in "$@"; do
-        path_elems=(${path_elems[@]%%"$to_remove"})
+        elems=("${elems[@]//$to_remove/}")
     done
-    IFS=:
-    # output the new array
-    echo "PATH=${path_elems[*]} ; export PATH"
+
+    # Remove unset elements from the array
+    local -i index
+    for index in "${!elems[@]}"; do
+        [[ -n "${elems[index]}" ]] || unset elems[index]
+    done
+
+    # Output the new array separated by $char
+    IFS=$char
+    echo "${elems[*]}"
+}
+
+sv_push () {
+    local IFS="$1"
+    shift
+    local varname="$1"
+    shift
+
+    local varval="${!varname}"
+    echo "${varval}${varval:+:}$*"
+}
+
+sv_unshift () {
+    local IFS="$1"
+    shift
+    local varname="$1"
+    shift
+
+    local varval="${!varname}"
+    echo "$*${varval:+:}${varval}"
+}
+
+env_remove () {
+    local varname="$1"
+    shift
+
+    echo "${varname}=$(sv_remove $':' "$varname" "$@") ; export $varname"
+}
+
+env_push () {
+    local varname="$1"
+    shift
+
+    local _removed=''
+    _removed="$(sv_remove $':' "$varname" "$@")"
+
+    export _removed
+
+    local pushed=''
+    pushed="$(sv_push $':' _removed "$@")"
+
+    echo "${varname}=${pushed} ; export $varname"
+}
+
+env_unshift () {
+    local varname="$1"
+    shift
+
+    local _removed=''
+    _removed="$(sv_remove $':' "$varname" "$@")"
+
+    export _removed
+
+    local unshifted=''
+    unshifted="$(sv_unshift $':' _removed "$@")"
+
+    echo "${varname}=${unshifted} ; export $varname"
+}
+
+path_remove () {
+    env_remove PATH "$@"
 }
 
 path_push () {
-    eval "$(path_remove "$@")"
-    local IFS=:
-    echo "PATH=${PATH}${PATH:+:}$* ; export PATH"
+    env_push PATH "$@"
 }
 
 path_unshift () {
-    eval "$(path_remove "$@")"
-    local IFS=:
-    echo "PATH=$*${PATH:+:}${PATH} ; export PATH"
+    env_unshift PATH "$@"
 }
 
 # Check whether a program exists

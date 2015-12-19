@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script is designed to help you clean your computer from unneeded
+# This script is designed to help you clean your computer of unneeded
 # packages. The script will find all packages that no other installed package
 # depends on. It will output this list of packages excluding any you have
 # placed in the ignore list. You may browse through the script's output and
@@ -8,7 +8,10 @@
 
 # Enter groups and packages here which you know you wish to keep. They will
 # not be included in the list of unrequired packages later.
-ignoregrp="base base-devel"
-ignorepkg=""
 
-comm -23 <(pacman -Qqt | sort) <(echo $ignorepkg | tr ' ' '\n' | cat <(pacman -Sqg $ignoregrp) - | sort -u)
+: "${IGNOREGROUP:=base:base-devel}"
+: "${IGNOREPKG:=}"
+
+declare -a ignorepkgs=(${IGNOREPKG/$':'/$' '} $(pacman -Sqg ${IGNOREGROUP//$':'/$' '}))
+comm -23 <(pacman -Qqt | sort) <(sort -u <<<"${ignorepkgs[@]//$' '/$'\n'}")
+

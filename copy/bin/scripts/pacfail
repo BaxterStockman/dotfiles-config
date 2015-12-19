@@ -1,8 +1,10 @@
 #!/bin/bash
 
-outfile=$1
-existing=($(pacman -Su | grep 'exists in filesystem' | perl -pe 's|\A.*\s(/.*?)\s.*\Z|$1|'))
+errmsg='exists in filesystem'
 
-for file in existing; do
-    pacman -Qo $file
-done
+while read -r line; do
+    [[ "$line" == *"$errmsg"* ]] || continue
+    file="${line## }"
+    file="${file%% }"
+    pacman -Qo "$file"
+done < <(pacman -Su)

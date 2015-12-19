@@ -28,7 +28,8 @@ Would you like to upgrade installed packages?
 
 This will be skipped if "Y" isn't pressed within the next 15 seconds.
 EOF
-read -N 1 -t 15 -p "Upgrade packages? [y/N] " upgrade_packages; echo
+read -r -n 1 -t 15 -p "Upgrade packages? [y/N] " upgrade_packages
+echo
 if [[ "$upgrade_packages" =~ [Yy] ]]; then
     e_header "Upgrading packages"
     if packer -Syu; then
