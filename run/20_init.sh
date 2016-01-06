@@ -1,26 +1,18 @@
 #!/usr/bin/env bash
 
-header="Running initialization files"
+#header="$(init::header)"
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-run () {
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    local srcfile="$1"
-    e_header "Sourcing ${srcfile}"
-    source "$srcfile"
-}
+pre () { parseopts "$@" ; }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 parseopts () {
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    while (( $# )); do
-        case "$1" in
+    for opt in "$@"; do
+        case "$opt" in
             -V|--skip-vim-plugins)
                 export DOTFILES_SKIP_VIM_PLUGINS=1
-                shift
+                break
                 ;;
         esac
     done
 }
-
-parseopts "$@"
