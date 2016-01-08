@@ -142,6 +142,9 @@ Plug 'pbrisbin/vim-syntax-shakespeare'
 " provides insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Raimondi/delimitMate'
 
+" Vim syntax highlighting for Bats (Bash Automated Test System)
+Plug 'rosstimson/bats.vim'
+
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
 
@@ -560,8 +563,10 @@ nnoremap <C-L> :nohl<CR><C-L>
 
 " Undo the mapping of <C-a>, since that's what I use for my tmux prefix and
 " it's causing mischief with numbers
-nnoremap <A-a> <C-a>
-nnoremap <A-x> <C-x>
+noremap <A-a> <C-a>
+noremap <A-x> <C-x>
+unmap <C-a>
+unmap <C-x>
 
 " Change Working Directory to that of the current file
 cmap cwd lcd %:p:h
@@ -771,6 +776,11 @@ let g:syntastic_perl_checkers = ['perl']
 
 " Could be dangerous to use this when checking third-party files...
 let g:syntastic_enable_perl_checker = 1
+
+" Disable syntax checks for *.bats files, since shellcheck doesn't play nice
+" with Bats' augmented Bash syntax
+let g:syntastic_ignore_files = ['\m\.bats$']
+
 
 " =============================================================================
 " perlcritic.vim settings

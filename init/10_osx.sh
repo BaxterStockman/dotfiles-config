@@ -3,7 +3,7 @@
 
 # Ensure that we can actually, like, compile anything.
 if ! command -v gcc >/dev/null 2>&1; then
-    e_fatal "XCode or the Command Line Tools for XCode must be installed first." 1>&2
+    fatal "XCode or the Command Line Tools for XCode must be installed first." 1>&2
     exit 1
 fi
 
@@ -16,12 +16,12 @@ fi
 
 # Install Homebrew.
 if [[ ! "$(type -P brew)" ]]; then
-  e_header "Installing Homebrew"
+  title "Installing Homebrew"
   true | ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
 fi
 
 if [[ "$(type -P brew)" ]]; then
-  e_header "Updating Homebrew"
+  title "Updating Homebrew"
   brew doctor
   brew update
 
@@ -37,7 +37,7 @@ if [[ "$(type -P brew)" ]]; then
 
   list="$(to_install "${recipes[*]}" "$(brew list)")"
   if [[ "$list" ]]; then
-    e_header "Installing Homebrew recipes: $list"
+    title "Installing Homebrew recipes: $list"
     brew install $list
   fi
 
@@ -46,25 +46,25 @@ if [[ "$(type -P brew)" ]]; then
 
   # htop
   if [[ "$(type -P $binroot/htop)" && "$(stat -L -f "%Su:%Sg" "$binroot/htop")" != "root:wheel" || ! "$(($(stat -L -f "%DMp" "$binroot/htop") & 4))" ]]; then
-    e_header "Updating htop permissions"
+    title "Updating htop permissions"
     sudo chown root:wheel "$binroot/htop"
     sudo chmod u+s "$binroot/htop"
   fi
 
   # bash
   if [[ "$(type -P $binroot/bash)" && "$(cat /etc/shells | grep -q "$binroot/bash")" ]]; then
-    e_header "Adding $binroot/bash to the list of acceptable shells"
+    title "Adding $binroot/bash to the list of acceptable shells"
     echo "$binroot/bash" | sudo tee -a /etc/shells >/dev/null
   fi
   if [[ "$SHELL" != "$binroot/bash" ]]; then
-    e_header "Making $binroot/bash your default shell"
+    title "Making $binroot/bash your default shell"
     sudo chsh -s "$binroot/bash" "$USER" >/dev/null 2>&1
     e_arrow "Please exit and restart all your shells."
   fi
 
   # i don't remember why i needed this?!
   if [[ ! "$(type -P gcc-4.2)" ]]; then
-    e_header "Installing Homebrew dupe recipe: apple-gcc42"
+    title "Installing Homebrew dupe recipe: apple-gcc42"
     brew install https://raw.github.com/Homebrew/homebrew-dupes/master/apple-gcc42.rb
   fi
 fi
