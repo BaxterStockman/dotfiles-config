@@ -527,6 +527,9 @@ augroup vimrc
 
     " Set files in g:rcdir to use Vim syntax
     autocmd BufRead,BufNewFile * if bufname("%") =~ "^" . expand(g:rcdir) | set filetype=vim | endif
+
+    " Set .simplecov files to use Ruby syntax
+    autocmd BufRead,BufWrite,BufWritePost,BufNewFile .simplecov set filetype=ruby
 augroup END
 
 " =============================================================================

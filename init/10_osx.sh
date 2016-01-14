@@ -59,7 +59,7 @@ if [[ "$(type -P brew)" ]]; then
   if [[ "$SHELL" != "$binroot/bash" ]]; then
     title "Making $binroot/bash your default shell"
     sudo chsh -s "$binroot/bash" "$USER" >/dev/null 2>&1
-    e_arrow "Please exit and restart all your shells."
+    msg2 "Please exit and restart all your shells."
   fi
 
   # i don't remember why i needed this?!
