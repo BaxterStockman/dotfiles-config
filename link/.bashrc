@@ -44,5 +44,3 @@ alias_if () {
 }
 
 source_all "${DOTFILES_ROOT}/source"
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
