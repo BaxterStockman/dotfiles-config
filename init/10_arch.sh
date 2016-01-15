@@ -2,12 +2,12 @@
 [[ "$(< /etc/issue)" =~ ^Arch ]] || return 1
 
 if ! pacman -Qqs curl &>/dev/null; then
-  e_header "Installing curl"
+  title "Installing curl"
   pacman -S curl
 fi
 
 if ! pacman -Qqs packer &>/dev/null; then
-  e_header "Installing Packer"
+  title "Installing Packer"
   PACKER_PKGBUILD_URL="https://aur.archlinux.org/packages/pa/packer/PKGBUILD"
   CWD=$(pwd)
   BUILD_DIR="$CWD/packer"
@@ -22,7 +22,7 @@ if ! pacman -Qqs packer &>/dev/null; then
 fi
 
 # Upgrade existing packages
-e_header "Updating packages"
+title "Updating packages"
 cat <<EOF
 Would you like to upgrade installed packages?
 
@@ -31,7 +31,7 @@ EOF
 read -r -n 1 -t 15 -p "Upgrade packages? [y/N] " upgrade_packages
 echo
 if [[ "$upgrade_packages" =~ [Yy] ]]; then
-    e_header "Upgrading packages"
+    title "Upgrading packages"
     if packer -Syu; then
         echo "Upgraded packages."
     else

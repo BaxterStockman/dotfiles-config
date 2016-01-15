@@ -70,6 +70,8 @@ endif
 " Load plugins
 silent! if plug#begin('~/.vim/plugged')
 
+Plug 'tpope/vim-markdown'
+
 " vim-plug - https://github.com/junegunn/vim-plug
 " Reload .vimrc and call :PlugInstall to install plugins
 
@@ -87,7 +89,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 " A collection of vimscripts for Haskell development
 Plug 'dag/vim2hs', {'for': 'haskell'}
 
-"Plug 'dync/ctrlsf.vim'
+"Plug 'dyng/ctrlsf.vim'
 
 " A completion plugin for Haskell, using ghc-mod
 Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
@@ -141,6 +143,9 @@ Plug 'pbrisbin/vim-syntax-shakespeare'
 
 " provides insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Raimondi/delimitMate'
+
+" Vim syntax highlighting for Bats (Bash Automated Test System)
+Plug 'rosstimson/bats.vim'
 
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
@@ -197,6 +202,9 @@ Plug 'vim-perl/vim-perl', {
     \   'perl',
     \ 'do':
     \   'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+
+" Ruby support
+Plug 'vim-ruby/vim-ruby'
 
 " Create aliases for Vim commands
 Plug 'vim-scripts/cmdalias.vim'
@@ -508,6 +516,9 @@ augroup vimrc
     " Automatically detect filetype upon :w
     autocmd BufRead,BufWrite,BufWritePost * if !exists("&ft") | :filetype detect | endif
 
+    " Vim sets *.md files to Modula2 syntax
+    autocmd BufRead,BufWrite,BufWritePost *.md set filetype=markdown
+
     " Set Rexfiles to use Perl syntax
     autocmd BufRead,BufWrite,BufWritePost,BufNewFile Rexfile set filetype=perl
 
@@ -516,6 +527,9 @@ augroup vimrc
 
     " Set files in g:rcdir to use Vim syntax
     autocmd BufRead,BufNewFile * if bufname("%") =~ "^" . expand(g:rcdir) | set filetype=vim | endif
+
+    " Set .simplecov files to use Ruby syntax
+    autocmd BufRead,BufWrite,BufWritePost,BufNewFile .simplecov set filetype=ruby
 augroup END
 
 " =============================================================================
@@ -560,8 +574,10 @@ nnoremap <C-L> :nohl<CR><C-L>
 
 " Undo the mapping of <C-a>, since that's what I use for my tmux prefix and
 " it's causing mischief with numbers
-nnoremap <A-a> <C-a>
-nnoremap <A-x> <C-x>
+noremap <A-a> <C-a>
+noremap <A-x> <C-x>
+unmap <C-a>
+unmap <C-x>
 
 " Change Working Directory to that of the current file
 cmap cwd lcd %:p:h
@@ -771,6 +787,11 @@ let g:syntastic_perl_checkers = ['perl']
 
 " Could be dangerous to use this when checking third-party files...
 let g:syntastic_enable_perl_checker = 1
+
+" Disable syntax checks for *.bats files, since shellcheck doesn't play nice
+" with Bats' augmented Bash syntax
+let g:syntastic_ignore_files = ['\m\.bats$']
+
 
 " =============================================================================
 " perlcritic.vim settings
