@@ -463,6 +463,9 @@ set notimeout ttimeout ttimeoutlen=200
 "" Enable syntax highlighting
 "syntax on
 
+" Outdent `private', `protected'.
+let g:ruby_indent_access_modifier_style = 'outdent'
+
 " =============================================================================
 " Wildmenu
 " =============================================================================
@@ -512,6 +515,13 @@ set shell=/bin/bash
 " =============================================================================
 " Filetype mappings and related settings
 " =============================================================================
+function! SetRubyOptions()
+    setlocal tabstop=2
+    setlocal softtabstop=2
+    setlocal shiftwidth=2
+    setlocal expandtab
+endfunction
+
 augroup vimrc
     " Automatically detect filetype upon :w
     autocmd BufRead,BufWrite,BufWritePost * if !exists("&ft") | :filetype detect | endif
@@ -530,6 +540,8 @@ augroup vimrc
 
     " Set .simplecov files to use Ruby syntax
     autocmd BufRead,BufWrite,BufWritePost,BufNewFile .simplecov set filetype=ruby
+
+    autocmd FileType ruby,eruby call SetRubyOptions()
 augroup END
 
 " =============================================================================
@@ -595,7 +607,7 @@ vnoremap . :normal .<CR>
 cmap w!! w !sudo tee % >/dev/null
 
 " =============================================================================
-" Functions
+" General-Purpose Functions
 " =============================================================================
 function! s:ETW(what, ...)
   for f1 in a:000
@@ -610,7 +622,7 @@ function! s:ETW(what, ...)
   endfor
 endfunction
 
-function! s:Tabposition(posi, ...)
+function! s:TabPosition(posi, ...)
     let file = fnameescape(a:1)
     if file == '0'
         execute "tabnew"
@@ -700,8 +712,8 @@ command! -complete=file -nargs=+ Etabs call s:ETW('tabnew', <f-args>)
 command! -complete=file -nargs=+ Ewindows call s:ETW('new', <f-args>)
 command! -complete=file -nargs=+ Evwindows call s:ETW('vnew', <f-args>)
 
-command! -nargs=+ Tabposition call s:Tabposition(<f-args>)
-command! -nargs=? Tabfirst call s:Tabposition(0, <f-args>)
+command! -nargs=+ TabPosition call s:TabPosition(<f-args>)
+command! -nargs=? Tabfirst call s:TabPosition(0, <f-args>)
 
 command! -nargs=? -range=% Space2Tab call IndentConvert(<line1>,<line2>,0,<q-args>)
 command! -nargs=? -range=% Tab2Space call IndentConvert(<line1>,<line2>,1,<q-args>)
