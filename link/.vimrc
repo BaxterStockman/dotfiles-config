@@ -197,11 +197,16 @@ Plug 'Valloric/YouCompleteMe', {'do': './install.sh'}
 autocmd! User YouCompleteMe call youcompleteme#Enable()
 
 " Support for Perl 5 and Perl 6 in Vim
-Plug 'vim-perl/vim-perl', {
-    \ 'for':
-    \   'perl',
-    \ 'do':
-    \   'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+if v:version >= 704
+    Plug 'vim-perl/vim-perl', {
+        \ 'for': 'perl',
+        \ 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+else
+    Plug 'vim-perl/vim-perl', {
+        \ 'for': 'perl',
+        \ 'do': 'make clean fix_old_vim carp dancer highlight-all-pragmas moose test-more try-tiny' }
+endif
+
 
 " Ruby support
 Plug 'vim-ruby/vim-ruby'
@@ -351,7 +356,10 @@ endif
 " =============================================================================
 
 " Don't allow syntax plugins to conceal text
-set conceallevel=0
+if v:version >= 703
+    set conceallevel=0
+    autocmd FileType * set conceallevel=0
+end
 
 " Show the current line
 "set cursorline
@@ -834,5 +842,4 @@ augroup vimrc
 	autocmd VimEnter,BufEnter,BufNewFile call SourceLocal()
 augroup END
 
-set conceallevel=0
 call SourceLocal()
