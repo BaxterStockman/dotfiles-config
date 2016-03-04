@@ -149,47 +149,53 @@ function set_prompts () {
 
     # sanitize TERM:
     local safe_term=${TERM//[^[:alnum:]]/?}
-    local match_lhs=""
 
+    local dir_colors_file=''
     if [[ -f ~/.dir_colors ]]; then
-        match_lhs="${match_lhs}$(<~/.dir_colors)"
+        dir_colors_file=~/.dir_colors
     elif [[ -f /etc/DIR_COLORS ]]; then
-        match_lhs="${match_lhs}$(</etc/DIR_COLORS)"
+        dir_colors_file=/etc/DIR_COLORS
     fi
 
-    if [[ -z ${match_lhs} ]]; then
-        type -P dircolors >/dev/null
-        match_lhs=$(dircolors --print-database)
-    fi
-
-    if [[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] ; then
-        # we have colors :-)
-
-        # Enable colors for ls, etc. Prefer ~/.dir_colors
-        if type -P dircolors >/dev/null ; then
-            if [[ -f ~/.dir_colors ]] ; then
-                eval "$(dircolors -b ~/.dir_colors)"
-            elif [[ -f /etc/DIR_COLORS ]] ; then
-                eval "$(dircolors -b /etc/DIR_COLORS)"
-            fi
-        fi
-
-        configure_color_prompts
-
-        if ! [[ "$OSTYPE" =~ ^(darwin|freebsd) ]]; then
-            alias ls="ls --color=auto"
-            alias diff='colordiff'
-            alias dir="dir --color=auto"
-            alias grep="grep --color=auto"
-            alias dmesg='dmesg --color'
-        fi
+    if [[ -z ${dir_colors_file} ]]; then
+        type -P dircolors >/dev/null || return 1
+        exec 514< <(dircolors --print-database)
     else
-        # show root@ when we do not have colors
-        PS1="\u@\h \w \$([[ \$? != 0 ]] && echo \":( \")\$ "
-
-        # Use this other PS1 string if you want \W for root and \w for all other users:
-        # PS1="\u@\h $(if [[ ${EUID} == 0 ]]; then echo '\W'; else echo '\w'; fi) \$([[ \$? != 0 ]] && echo \":( \")\$ "
+        exec 514<"$dir_colors_file"
     fi
+
+    local entry='' term=''
+    while read -r -u 514 entry term _; do
+        [[ "$entry" == TERM ]] || continue
+
+        if [[ "$TERM" == $term ]]; then
+            # we have colors :-)
+
+            eval "$(dircolors -b "$dir_colors_file")"
+
+            configure_color_prompts
+
+            case "$OSTYPE" in
+                darwin|freebsd)
+                    ;;
+                *)
+                    alias ls="ls --color=auto"
+                    alias diff='colordiff'
+                    alias dir="dir --color=auto"
+                    alias grep="grep --color=auto"
+                    alias dmesg='dmesg --color'
+                    ;;
+            esac
+
+            return 0
+        fi
+    done
+
+    # show root@ when we do not have colors
+    PS1="\u@\h \w \$([[ \$? != 0 ]] && echo \":( \")\$ "
+
+    # Use this other PS1 string if you want \W for root and \w for all other users:
+    # PS1="\u@\h $(if [[ ${EUID} == 0 ]]; then echo '\W'; else echo '\w'; fi) \$([[ \$? != 0 ]] && echo \":( \")\$ "
 }
 
 set_prompts
