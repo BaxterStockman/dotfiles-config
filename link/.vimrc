@@ -142,13 +142,11 @@ Plug 'pbrisbin/vim-syntax-shakespeare'
 " provides insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Raimondi/delimitMate'
 
-<<<<<<< HEAD
 " Vim filetype and tools support for Crystal language
 Plug 'rhysd/vim-crystal'
-=======
+
 " Vim syntax highlighting for Bats (Bash Automated Test System)
 Plug 'rosstimson/bats.vim'
->>>>>>> e5e033fd53c89ffebc4d7473cd871f965e201eec
 
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
