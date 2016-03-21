@@ -7,7 +7,7 @@ install_vim_plug () {
     local vim_autoload_path="${1:-${HOME}/.vim/autoload}"
 
     if ! type -P curl; then
-        e_error "Curl is not installed; aborting"
+        error "Curl is not installed; aborting"
         return 1
     fi
 
@@ -32,17 +32,17 @@ for spf_13_dir in "${HOME}/.spf13" "${HOME}/.spf13-vim-3"; do
     fi
 done
 
-if truthy "$DOTFILES_SKIP_VIM_PLUGINS"; then
-    e_arrow "Skipping installation/update of vim plugins"
+if truthy "${DOTFILES_SKIP_VIM_PLUGINS:-false}"; then
+    msg2 "Skipping installation/update of vim plugins"
     return 0
 fi
 
 # If Vim exists, try to update vim-plug.  Otherwise, install it.
 if type -P vim >/dev/null; then
-    e_header "Updating vim-plug"
+    title "Updating vim-plug"
     if ! [[ -e "$DOTFILES_VIM_PLUG_PATH" ]]; then
         if ! install_vim_plug "$DOTFILES_VIM_AUTOLOAD_PATH"; then
-            e_error "Failed to install vim-plug"
+            error "Failed to install vim-plug"
             return 1
         fi
     fi

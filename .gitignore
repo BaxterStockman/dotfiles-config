@@ -1,6 +1,7 @@
 /bin/
 /caches/
 /cache/
+/coverage/
 /backups/
 /backup/
 /vendor/

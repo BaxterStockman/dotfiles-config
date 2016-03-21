@@ -142,8 +142,13 @@ Plug 'pbrisbin/vim-syntax-shakespeare'
 " provides insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Raimondi/delimitMate'
 
+<<<<<<< HEAD
 " Vim filetype and tools support for Crystal language
 Plug 'rhysd/vim-crystal'
+=======
+" Vim syntax highlighting for Bats (Bash Automated Test System)
+Plug 'rosstimson/bats.vim'
+>>>>>>> e5e033fd53c89ffebc4d7473cd871f965e201eec
 
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
@@ -195,11 +200,16 @@ Plug 'Valloric/YouCompleteMe', {'do': './install.sh'}
 autocmd! User YouCompleteMe call youcompleteme#Enable()
 
 " Support for Perl 5 and Perl 6 in Vim
-Plug 'vim-perl/vim-perl', {
-    \ 'for':
-    \   'perl',
-    \ 'do':
-    \   'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+if v:version >= 704
+    Plug 'vim-perl/vim-perl', {
+        \ 'for': 'perl',
+        \ 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+else
+    Plug 'vim-perl/vim-perl', {
+        \ 'for': 'perl',
+        \ 'do': 'make clean fix_old_vim carp dancer highlight-all-pragmas moose test-more try-tiny' }
+endif
+
 
 " Ruby support
 Plug 'vim-ruby/vim-ruby'
@@ -349,7 +359,10 @@ endif
 " =============================================================================
 
 " Don't allow syntax plugins to conceal text
-set conceallevel=0
+if v:version >= 703
+    set conceallevel=0
+    autocmd FileType * set conceallevel=0
+end
 
 " Show the current line
 "set cursorline
@@ -461,6 +474,9 @@ set notimeout ttimeout ttimeoutlen=200
 "" Enable syntax highlighting
 "syntax on
 
+" Outdent `private', `protected'.
+let g:ruby_indent_access_modifier_style = 'outdent'
+
 " =============================================================================
 " Wildmenu
 " =============================================================================
@@ -510,6 +526,13 @@ set shell=/bin/bash
 " =============================================================================
 " Filetype mappings and related settings
 " =============================================================================
+function! SetRubyOptions()
+    setlocal tabstop=2
+    setlocal softtabstop=2
+    setlocal shiftwidth=2
+    setlocal expandtab
+endfunction
+
 augroup vimrc
     " Automatically detect filetype upon :w
     autocmd BufRead,BufWrite,BufWritePost * if !exists("&ft") | :filetype detect | endif
@@ -525,6 +548,11 @@ augroup vimrc
 
     " Set files in g:rcdir to use Vim syntax
     autocmd BufRead,BufNewFile * if bufname("%") =~ "^" . expand(g:rcdir) | set filetype=vim | endif
+
+    " Set .simplecov files to use Ruby syntax
+    autocmd BufRead,BufWrite,BufWritePost,BufNewFile .simplecov set filetype=ruby
+
+    autocmd FileType ruby,eruby call SetRubyOptions()
 augroup END
 
 " =============================================================================
@@ -569,8 +597,10 @@ nnoremap <C-L> :nohl<CR><C-L>
 
 " Undo the mapping of <C-a>, since that's what I use for my tmux prefix and
 " it's causing mischief with numbers
-nnoremap <A-a> <C-a>
-nnoremap <A-x> <C-x>
+noremap <A-a> <C-a>
+noremap <A-x> <C-x>
+unmap <C-a>
+unmap <C-x>
 
 " Change Working Directory to that of the current file
 cmap cwd lcd %:p:h
@@ -588,7 +618,7 @@ vnoremap . :normal .<CR>
 cmap w!! w !sudo tee % >/dev/null
 
 " =============================================================================
-" Functions
+" General-Purpose Functions
 " =============================================================================
 function! s:ETW(what, ...)
   for f1 in a:000
@@ -603,7 +633,7 @@ function! s:ETW(what, ...)
   endfor
 endfunction
 
-function! s:Tabposition(posi, ...)
+function! s:TabPosition(posi, ...)
     let file = fnameescape(a:1)
     if file == '0'
         execute "tabnew"
@@ -693,8 +723,8 @@ command! -complete=file -nargs=+ Etabs call s:ETW('tabnew', <f-args>)
 command! -complete=file -nargs=+ Ewindows call s:ETW('new', <f-args>)
 command! -complete=file -nargs=+ Evwindows call s:ETW('vnew', <f-args>)
 
-command! -nargs=+ Tabposition call s:Tabposition(<f-args>)
-command! -nargs=? Tabfirst call s:Tabposition(0, <f-args>)
+command! -nargs=+ TabPosition call s:TabPosition(<f-args>)
+command! -nargs=? Tabfirst call s:TabPosition(0, <f-args>)
 
 command! -nargs=? -range=% Space2Tab call IndentConvert(<line1>,<line2>,0,<q-args>)
 command! -nargs=? -range=% Tab2Space call IndentConvert(<line1>,<line2>,1,<q-args>)
@@ -781,6 +811,11 @@ let g:syntastic_perl_checkers = ['perl']
 " Could be dangerous to use this when checking third-party files...
 let g:syntastic_enable_perl_checker = 1
 
+" Disable syntax checks for *.bats files, since shellcheck doesn't play nice
+" with Bats' augmented Bash syntax
+let g:syntastic_ignore_files = ['\m\.bats$']
+
+
 " =============================================================================
 " perlcritic.vim settings
 " =============================================================================
@@ -810,5 +845,4 @@ augroup vimrc
 	autocmd VimEnter,BufEnter,BufNewFile call SourceLocal()
 augroup END
 
-set conceallevel=0
 call SourceLocal()
