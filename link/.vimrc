@@ -83,13 +83,11 @@ Plug 'bling/vim-airline'
 " Adds additional syntax highlighting and fixes for Ansible's dialect of YAML
 Plug 'chase/vim-ansible-yaml', {'for': ['ansible', 'yaml']}
 
-" Fuzzy file, buffer, mru, tag, etc finder
-Plug 'ctrlpvim/ctrlp.vim'
-
 " A collection of vimscripts for Haskell development
 Plug 'dag/vim2hs', {'for': 'haskell'}
 
-"Plug 'dyng/ctrlsf.vim'
+" An ack.vim alternative mimics Ctrl-Shift-F on Sublime Text 2
+Plug 'dyng/ctrlsf.vim'
 
 " A completion plugin for Haskell, using ghc-mod
 Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
@@ -143,6 +141,9 @@ Plug 'pbrisbin/vim-syntax-shakespeare'
 
 " provides insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Raimondi/delimitMate'
+
+" Vim filetype and tools support for Crystal language
+Plug 'rhysd/vim-crystal'
 
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
