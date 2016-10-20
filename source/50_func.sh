@@ -1,70 +1,141 @@
 #!/usr/bin/env bash
 
 # cd and ls in one
-function cl() {
-    cd "$1" && ls
+cl() {
+    cd "$@" && ls
+}
+
+# Temporary workspace
+work() {
+    stored="$(pwd -P)"
+    tmpdir="$(mktemp -d)"
+
+    cd "$tmpdir" || return $?
+    "${SHELL:-$BASH}"
+    cd "$stored" || :
+    printf 1>&2 -- 'Leaving workspace in %s\n' "$tmpdir"
+    rm --one-file-system --interactive=once -v -r "$tmpdir"
 }
 
 # calculator
-function calc() {
+calc() {
     echo "scale=3;$*" | bc -l
 }
 
 # Create a new directory and enter it
-function md() {
+md() {
     mkdir -p "$@" && cd "$@"
 }
 
 # Set the terminal's title bar.
-function titlebar() {
-  echo -n $'\e]0;'"$*"$'\a'
+titlebar() {
+    echo -n $'\e]0;'"$*"$'\a'
+}
+
+in_interactive_toplevel() {
+    # Some sanity checks
+    [[ "$-" == *i* ]] && (( BASH_SUBSHELL == 0 ))
 }
 
 if [[ -n $TMUX ]]; then
-    function export () {
-        local -a args=("$@")
-        local -A noexport=(
-            [TERM]=true
-        )
+    declare() {
+        builtin declare "$@" || return $?
 
-        builtin export "$@"
+        # Shortcircuit if we're not running interactively, are in a subshell,
+        # or in a function.
+        in_interactive_toplevel || return
 
-        local var val trimmed_item
-        for item in "${args[@]}"; do
-            # Remove the longest substring between the beginning of a flag and a
-            # space character.  This should remove all but the positional
-            # parameters that the 'export' builtin was invoked with.
-            trimmed_item="${item##-* }"
+        # Pre-parse declarations in order to ensure we're dealing only with
+        # "scalar" variables.
+        local -A stop_flags=()
+        for stop_flag in f F p a A; do
+            stop_flags["-$stop_flag"]=1
+        done
 
-            var="${trimmed_item%%=*}"
-            val="${trimmed_item#*=}"
-
-            if "${noexport["$var"]:-false}"; then
+        local var='' val=''
+        for item in "$@"; do
+            if (( "${stop_flags[$item]:-0}" == 1 )); then
                 return
+            elif [[ "$item" == -* ]]; then
+                continue
             fi
 
-            # For the case 'export SOMEVAR'
-            [[ "$val" == "$var" ]] && val="${!var}"
+            if [[ "$item" == *=* ]]; then
+                var="${item%%=*}"
+                val="${item#*=}"
+            else
+                var="$item"
+                val="${!var}"
+            fi
+
+            command tmux setenv "$var" "$val"
+        done
+
+        # TODO handle -n -- i.e., reference
+
+    }
+
+    export() {
+        builtin export "$@" || return $?
+
+        # Shortcircuit if we're not running interactively, are in a subshell,
+        # or in a function.
+        in_interactive_toplevel || return
+
+        # Don't set these variables in the tmux environment.
+        # TERM - it is possible to run tmux sessions in two different terminal
+        # types, and if (for instance) the two types support different numbers
+        # of colors, we will get weird display issues.
+        local -A noexport
+        for env_var in TERM; do
+            noexport["$env_var"]=1
+        done
+
+        # Pre-parse declarations in order to ensure we're dealing only with
+        # "scalar" variables.
+        local -A stop_flags=()
+        for stop_flag in f p; do
+            stop_flags["-$stop_flag"]=1
+        done
+
+        local var='' val=''
+        for item in "$@"; do
+            if (( "${stop_flags[$item]:-0}" == 1 )); then
+                return
+            elif [[ "$item" == -* ]]; then
+                continue
+            fi
+
+            if [[ "$item" == *=* ]]; then
+                var="${item%%=*}"
+                val="${item#*=}"
+            else
+                var="$item"
+                val="${!var}"
+            fi
+
+            (( ${noexport["$var"]:-0} == 1 )) && continue
 
             command tmux setenv "$var" "$val"
         done
     }
 
-    function unset () {
-        local -a argv=("$@")
-        builtin unset "$@"
+    unset () {
+        builtin unset "$@" || return $?
 
-        for item in "${argv[@]}"; do
+        # Shortcircuit if we're not running interactively, are in a subshell,
+        # or in a function.
+        in_interactive_toplevel || return
+
+        for item in "$@"; do
             [[ "$item" == -* ]] && continue
-            # Remove the longest substring between the beginning of a flag and
-            # a space character.  This should remove all but the positional
-            # parameters that the 'unset' builtin was invoked with.
+
             command tmux setenv -ur "$item"
         done
     }
 fi
 
-function clean_path () {
+clean_path () {
     local varname="${1:-PATH}"
     local -A elem_map
     local -a new_var_elems
@@ -79,4 +150,10 @@ function clean_path () {
 
     local IFS=:
     echo "${varname}=${new_var_elems[*]} ; export ${varname}"
+}
+
+clean_shell() {
+    builtin unset -f export declare unset &>/dev/null
+    builtin unset -v PROMPT_COMMAND &>/dev/null
+    builtin trap - debug &>/dev/null
 }
