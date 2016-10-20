@@ -472,9 +472,6 @@ set notimeout ttimeout ttimeoutlen=200
 "" Enable syntax highlighting
 "syntax on
 
-" Outdent `private', `protected'.
-let g:ruby_indent_access_modifier_style = 'outdent'
-
 " =============================================================================
 " Wildmenu
 " =============================================================================
@@ -748,6 +745,12 @@ CommandCabbrev chk SyntasticCheck
 " =============================================================================
 " Plugin-specific settings
 " =============================================================================
+" Don't effing redefine my bindings, mmkay?
+let g:go_doc_keywordprg_enabled = 0
+
+" Outdent `private', `protected'.
+let g:ruby_indent_access_modifier_style = 'outdent'
+
 " haskellmode-vim
 let g:haddock_browser = 'firefox'
 
