@@ -6,4 +6,6 @@ PERLBREW_ROOT="${HOME}/opt/perl5/perlbrew"
 exists "${PERLBREW_ROOT}/bin/perlbrew" || exists /usr/bin/vendor_perl/perlbrew || return
 
 export PERLBREW_ROOT
-[[ -d ${PERLBREW_ROOT} ]] && source "${PERLBREW_ROOT}/etc/bashrc"
+
+# shellcheck disable=SC1090
+[[ -f "${PERLBREW_ROOT}/etc/bashrc" ]] && source "${PERLBREW_ROOT}/etc/bashrc"
