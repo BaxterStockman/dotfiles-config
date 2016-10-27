@@ -1,5 +1,5 @@
 author:     Matt Schreiber
 email:      schreibah@gmail.com
-builder:    Module::Build
+builder:    Module::Build::Tiny
 verbose:    1
 license:    artistic_2
