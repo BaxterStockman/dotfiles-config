@@ -70,15 +70,14 @@ endif
 " Load plugins
 silent! if plug#begin('~/.vim/plugged')
 
-Plug 'tpope/vim-markdown'
-
 " vim-plug - https://github.com/junegunn/vim-plug
 " Reload .vimrc and call :PlugInstall to install plugins
 
 Plug 'easymotion/vim-easymotion'
 
 " lean & mean status/tabline for vim that's light as air
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Adds additional syntax highlighting and fixes for Ansible's dialect of YAML
 Plug 'chase/vim-ansible-yaml', {'for': ['ansible', 'yaml']}
@@ -99,12 +98,15 @@ Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 
 " A command-line fuzzy finder written in Go
 Plug 'junegunn/fzf', {'do': 'yes \| ./install --no-update-rc'}
+Plug 'junegunn/fzf.vim'
 
 " Go development plugin for Vim
 Plug 'fatih/vim-go', {'for': 'go'}
 
 " one colorscheme pack to rule them all!
 Plug 'flazz/vim-colorschemes'
+
+Plug 'honza/vim-snippets'
 
 " A Vim alignment plugin
 Plug 'junegunn/vim-easy-align', {'on': ['<Plug>(EasyAlign)', 'EasyAlign']}
@@ -117,6 +119,9 @@ Plug 'junegunn/seoul256.vim'
 
 " Vim python-mode.  PyLint, Rope, Pydoc, breakpoints from box
 Plug 'klen/python-mode', {'for': 'python'}
+
+" jinja plugins for Vim
+Plug 'lepture/vim-jinja'
 
 if v:version >= 703
     " Show a diff via Vim sign column
@@ -153,6 +158,9 @@ Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
 " Syntax checking hacks for vim
 Plug 'scrooloose/syntastic'
 
+" The ultimate snippet solution for Vim
+Plug 'SirVer/ultisnips'
+
 " Interactive command execution in Vim
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
 
@@ -167,6 +175,8 @@ Plug 'tpope/vim-eunuch'
 
 " A Git wrapper so awesome, it should be illegal
 Plug 'tpope/vim-fugitive'
+
+Plug 'tpope/vim-markdown'
 
 " Enable repeating supporting plugin maps with "."
 " example: silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
@@ -472,7 +482,7 @@ set notimeout ttimeout ttimeoutlen=200
 "syntax on
 
 " Outdent `private', `protected'.
-let g:ruby_indent_access_modifier_style = 'outdent'
+" let g:ruby_indent_access_modifier_style = 'outdent'
 
 " =============================================================================
 " Wildmenu
@@ -570,10 +580,12 @@ nnoremap tt :tabedit<Space>
 nnoremap tn :tabnext<Space>
 nnoremap tm :tabm<Space>
 nnoremap td :tabclose<CR>
-nnoremap H :tabfirst<CR>
-nnoremap J :tabnext<CR>
-nnoremap K :tabprev<CR>
-nnoremap L :tablast<CR>
+
+" Buffering handling mappings
+nnoremap H :bfirst<CR>
+nnoremap J :bnext<CR>
+nnoremap K :bprev<CR>
+nnoremap L :blast<CR>
 
 " Enter normal mode
 inoremap jjj <Esc>
@@ -747,6 +759,14 @@ CommandCabbrev chk SyntasticCheck
 " =============================================================================
 " Plugin-specific settings
 " =============================================================================
+" vim-airline
+" List open buffers in top status bar
+let g:airline#extensions#tabline#enabled = 1
+
+" Pretty
+let g:airline_theme = 'solarized'
+
+
 " haskellmode-vim
 let g:haddock_browser = 'firefox'
 
