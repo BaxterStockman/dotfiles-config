@@ -12,8 +12,7 @@ for plugin_type in action callback connection filter lookup vars; do
     ansible_cfg+=("$plugin_relpath = ${plugin_relpath}:~/.ansible/plugins/${plugin_relpath}")
 done
 
-printf -v inventory '%s' '
-[arch]
+printf -v inventory '%s' '[arch]
 
 [local]
 localhost
@@ -35,8 +34,7 @@ ansible_host = 127.0.0.1
 ansible_connection = local
 '
 
-printf -v travis_yml '%s' '
----
+printf -v travis_yml '%s' '---
 language: python
 python: "2.7"
 
@@ -69,8 +67,7 @@ script:
         fi
 '
 
-printf -v before_script '%s' '
-#!/usr/bin/env bash
+printf -v before_script '%s' '#!/usr/bin/env bash
 
 # Ensure that Ansible recognizes the short-form role name, rather than the
 # name of the GitHub repo.  For instance, $PWD/../ansible-role-nginx gets
@@ -90,41 +87,63 @@ fi
 ln -sf "$DESTDIR" "${dirname}/${ROLE_NAME}"
 '
 
-write_files () {
+printf -v playbook_fmt '%s' '---
+- hosts: all
+  roles:
+    # Role is really called %s; this is just a way to load it that is agnostic
+    # about the name of the directory where the role lives.
+    - role: '"'"'{{ playbook_dir | dirname | realpath | basename }}'"'"'
+'
+
+write_files_pre () {
     local role_name="$1"
     shift
     local init_path="${init_path:-"$PWD"}"
     shift
 
     local ansible_cfg_path="${init_path}/${role_name}/ansible.cfg"
-    local inventory_path="${init_path}/${role_name}/hosts"
     local travis_yml_path="${init_path}/${role_name}/.travis.yml"
     local before_script_path="${init_path}/${role_name}/.travis/before_script.sh"
 
     mkdir -p "${before_script_path%/*}"
 
     [[ -e "$ansible_cfg_path" ]] || (IFS=$'\n'; echo "${ansible_cfg[*]}" >> "$ansible_cfg_path")
-    [[ -e "$inventory_path" ]] || echo "$inventory" >> "$inventory_path"
+    #[[ -e "$inventory_path" ]] || echo "$inventory" >> "$inventory_path"
     [[ -e "$travis_yml_path" ]] || echo "$travis_yml" >> "$travis_yml_path"
     [[ -e "$before_script_path" ]] || echo "$before_script" >> "$before_script_path"
 }
 
+write_files_post() {
+    local role_name="$1"
+    shift
+    local init_path="${init_path:-"$PWD"}"
+    shift
+
+    local inventory_path="${init_path}/${role_name}/tests/inventory"
+    local playbook_path="${init_path}/${role_name}/tests/test.yml"
+    echo "$inventory" > "$inventory_path"
+    printf -- "$playbook_fmt" "$role_name" > "$playbook_path"
+}
+
+_ansible_galaxy() {
+    command ansible-galaxy "$@"
+}
+
 # A tiny li'l wrapper function that helps set roles up the way I like.
 ansible_galaxy () {
-    command ansible-galaxy "$@"
-    local -i exit_code=$?
-    (( exit_code == 0 )) || return $exit_code
-
-    case "$1" in
-        init)
+    local opt_name=''
+    for opt_name in "${@:1:$(( $# - 1))}"; do
+        if [[ "$opt_name" == init ]]; then
             local -i i
             local init_path=''
             local opt=''
             for (( i = 2 ; i <= $# ; i++ )); do
                 opt="${!i}"
                 if [[ "${opt}" == -h ]] || [[ "${opt}" == --help ]]; then
-                    return $exit_code
+                    _ansible_galaxy
+                    return $?
                 fi
+
                 if [[ "${opt}" == -p ]] || [[ "${opt}" == --init-path ]]; then
                     ((i++))
                     init_path="${!i}"
@@ -133,14 +152,15 @@ ansible_galaxy () {
 
             local role_name="${*:$#:1}"
 
-            write_files "$role_name" "$init_path"
+            write_files_pre "$role_name" "$init_path"
+            _ansible_galaxy "$@" || return $?
+            write_files_post "$role_name" "$init_path"
 
-            ;;
-        *)
-            # Anything besides 'init' is ignored.
-            :
-            ;;
-    esac
+            return 0
+        fi
+    done
+
+    _ansible_galaxy "$@"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
