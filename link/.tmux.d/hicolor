@@ -23,7 +23,7 @@ set -g status-right "#[fg=colour136,dim] #h | %d %b %R"
 # Hack to detect whether tmux is version 1.9 or above. Since the shell can't do
 # floating point comparison and we can't assume that bc or some similar program
 # is available, we just trust that tmux releases will never have more than two
-# digits in it.
+# digits.
 if-shell '[ $(tmux -V | tr -cd "[:digit:]") -ge 19 ]' \
 	'source ~/.tmux.d/current' \
 	'source ~/.tmux.d/deprecated'
