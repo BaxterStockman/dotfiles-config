@@ -242,6 +242,9 @@ Plug 'vim-scripts/txt2pdf.vim'
 " A completion function for unicode glyphs
 Plug 'vim-scripts/unicode.vim'
 
+" What it says on the tin
+Plug 'vimwiki/vimwiki'
+
 " Vim filetype detection by the she-bang line at file
 Plug 'vitalk/vim-shebang'
 
@@ -745,6 +748,13 @@ CommandCabbrev chk SyntasticCheck
 " =============================================================================
 " Plugin-specific settings
 " =============================================================================
+" Configure where vimwiki locates wikis and generated HTML
+let g:vimwiki_list = [{
+            \    'path':         '~/Dropbox/Wiki/vimwiki',
+            \    'path_html':    '~/Dropbox/Wiki/vimwiki_html'}]
+
+let g:vimwiki_conceallevel = 0
+
 " Don't effing redefine my bindings, mmkay?
 let g:go_doc_keywordprg_enabled = 0
 
@@ -758,7 +768,7 @@ let g:haddock_browser = 'firefox'
 let g:autoclose_vim_commentmode = 1
 
 " Set file extensions that use C syntax highlighting
-let g:C_SourceCodeExtensions = 'c cc cp cxx cpp CPP c++ C i ii hxx h'
+
 
 " Remap perl MapLeader
 "let g:Perl_MapLeader = ';'
