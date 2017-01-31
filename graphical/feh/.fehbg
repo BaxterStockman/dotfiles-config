@@ -1,0 +1,2 @@
+#!/bin/sh
+feh  --bg-scale '/home/matt/.config/wallpaper/images/gliese667cc.jpg' 

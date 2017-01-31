@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+eachdir_main() {
+    local -a dirs=()
+
+    while (( $# )); do
+        case "$1" in
+            --) shift ; break ;;
+            -h) eachdir_usage ; return ;;
+            *) dirs+=("$1"); shift ;;
+        esac
+    done
+
+    if (( $# < 1 )); then
+        echo 1>&2 "No command supplied!"
+        return 1
+    fi
+
+    if (( ${#dirs[@]} < 1 )); then
+        local pwd="${PWD:-"$(pwd -P)"}"
+        dirs=("$pwd"/*)
+
+        if (( ${#dirs[@]} < 1 )) || [[ "${dirs[0]}" == "${pwd}/*" ]]; then
+            echo 1>&2 "Empty list of directories!"
+            return 1
+        fi
+    fi
+
+    # For underlining headers.
+    local h1='' h2=''
+    h1="$(tput smul)"
+    h2="$(tput rmul)"
+
+    local -a cmd=()
+    if [[ "$1" == -* ]]; then
+        cmd=("$BASH" "$@")
+    else
+        cmd=("$@")
+    fi
+
+    # Do stuff for each specified dir, in each dir. Non-dirs are ignored.
+    local -a nops=()
+    local dir='' output=''
+    for dir in "${dirs[@]}"; do
+        # Skip non-dirs.
+        [[ ! -d "$dir" ]] && continue
+
+        # If the dir isn't /, strip the trailing /.
+        [[ "$dir" != "/" ]] && dir="${dir%/}"
+
+        # Execute the command, grabbing all stdout and stderr.
+        output="$( { cd "$dir" && "${cmd[@]}" ; } 2>&1 )"
+
+        if [[ -n "$output" ]]; then
+            # If the command had output, display a header and that output.
+            echo -e "${h1}${dir}${h2}\n$output\n"
+        else
+            # Otherwise push it onto an array for later display.
+            nops+=("$dir")
+        fi
+    done
+
+    # List any dirs that had no output.
+    if (( ${#nops[@]} > 0 )); then
+        echo "${h1}no output from${h2}"
+        for dir in "${nops[@]}"; do
+            echo "$dir";
+        done
+    fi
+}
+
+function eachdir_usage() {
+    printf 'eachdir
+http://benalman.com/
+
+Usage: eachdir [dirs] -- command
+
+Run one or more commands in one or more dirs.
+
+By default, all subdirs of the current dir will be iterated over.  Otherwise,
+all arguments other than "-h" prior to the mandatory "--" will be used as the
+target directories.  All remaining args are the command(s) to be executed for
+each dir.
+
+In bash, aliasing like this allows you to specify aliases/functions:
+  alias eachdir="source eachdir && eachdir_main"
+
+Both of these print the working directory of every subdir of the current dir:
+  eachdir pwd
+  eachdir * -- pwd
+
+Perform a "git pull" inside all subdirs starting with repo-:
+  eachdir repo-* -- git pull
+
+Compound commands *must* be quoted and preceded by "-c"; they will be executed
+by the current Bash interpreter.  For example, here is how to perform a few
+git-related commands inside all subdirs starting with repo-:
+  eachdir repo-* -- -c "git fetch && git merge"
+
+Copyright (c) 2012 "Cowboy" Ben Alman, 2017 Matt Schreiber
+Licensed under the MIT license.
+http://benalman.com/about/license/
+'
+}
+
+
+# By putting the above code inside a function, if this file is sourced (which
+# is required for external aliases/functions to be used as commands), vars
+# can be local and return can be used to exit.
+[[ "${BASH_SOURCE[0]}" == "$0" ]] && eachdir_main "$@"

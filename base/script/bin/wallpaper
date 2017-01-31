@@ -1,0 +1,16 @@
+#!/bin/sh
+
+wallpaper_main() {
+	local wallpaper_dir="${1:-${XDG_CONFIG_HOME}/wallpaper/images}"
+
+	while : ; do
+		find "$wallpaper_dir" -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |
+			shuf -n1 -z | xargs -0 feh --bg-scale
+		sleep 15m
+	done
+}
+
+: "${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_CONFIG_HOME
+
+wallpaper_main "$@"

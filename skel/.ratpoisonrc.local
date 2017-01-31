@@ -1,8 +1,0 @@
-#
-# Set local ratpoison settings here
-#
-
-#set padding 0 16 0 16
-#set font xft:Inconsolata:pixelsize=16:antialias=true:hinting=true
-#alias term exec urxvtc
-#bind v exec urxvtc -e vim

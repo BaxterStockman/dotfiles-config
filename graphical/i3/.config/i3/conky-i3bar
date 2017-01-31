@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# 1. Send the header so that i3bar knows we want to use JSON,
+# 2. Begin the endless array,
+# 3. Send an empty first array of blocks to make the loop simpler.
+printf -- '
+{"version": 1}
+[
+    [],
+'
+
+# Now send blocks with information forever:
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+exec conky -c "${XDG_CONFIG_HOME}"/conky/conky-i3 -u 1

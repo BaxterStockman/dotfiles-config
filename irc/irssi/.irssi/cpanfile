@@ -1,0 +1,12 @@
+on 'runtime' => sub {
+    requires => "Crypt::OpenSSL::Bignum";
+    requires => "Date::Format";
+    requires => "File::Glob";
+    requires => "FileHandle";
+    requires => "HTML::Entities";
+    requires => "List::Util";
+    requires => "LWP::Simple";
+    requires => "MIME::Base64";
+    requires => "Crypt::DH";
+    requires => "Crypt::Blowfish";
+};

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+: "${DZEN_FONT:=inconsolatazi4}"
+: "${DZEN_FONT_SIZE:=16}"
+
+# shellcheck disable=SC2086
+conky -d ${1:--c "$1"} | dzen2 -xs 2 -ta r -h "${DZEN_FONT_SIZE}" -fn "${DZEN_FONT}" &

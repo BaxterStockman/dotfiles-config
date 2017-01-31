@@ -1,0 +1,30 @@
+pcm.!default {
+    type hw
+    card CODEC
+}
+
+ctl.!default {
+    type hw
+    card CODEC
+}
+#pcm.usb
+#{
+#    type hw
+#    card VF0790
+#
+#}
+#
+#pcm.!default
+#{
+#    type asym
+#    playback.pcm
+#    {
+#        type plug
+#        slave.pcm "dmix"
+#    }
+#    capture.pcm
+#    {
+#        type plug
+#        slave.pcm "usb"
+#    }
+#}

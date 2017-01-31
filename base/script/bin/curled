@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+curled_usage() {
+    # shellcheck disable=SC2016
+    printf -- 'cURL a remote file into an editor.
+http://benalman.com/
+
+Usage: %s [curloptions...] url"
+
+cURL a remote file into the editor of your choice. The filename will be based
+on the filename of the URL. If a file extension cannot be determined from the
+URL, index.html will be used.
+
+The editor is inferred in the following fashion:
+
+1. Use the value of $VISUAL, if present
+2. Use the value of $EDITOR, if present,
+3. Auto-magically stripping any leading "curl" off the filename of this
+   script, using the remaining string as the editor name.  For example, call
+   this script "curlmate" and "mate" will be run.  You can create a link to the
+   base "curled" script rather than copying it; the auto-magical logic works on
+   the script invocation name rather than the underlying disk file.
+
+Your current editor is %s.
+
+Copyright (c) 2012 "Cowboy" Ben Alman, 2017 Matt Schreiber
+Licensed under the MIT license.
+http://benalman.com/about/license/
+' "${0##*/}" "$(curled_editor)"
+}
+
+curled_editor() {
+    local edvar=''
+    for edvar in VISUAL EDITOR; do
+        if declare -p "$edvar" &>/dev/null && [[ "${!edvar:+x}" == x ]]; then
+            echo "${!edvar}"
+            return
+        fi
+    done
+
+    local script_name="${0:?unable to infer script name}"
+    local script_basename="${script_name##*/}"
+    echo "${script_basename#curl}"
+}
+
+curled_download() {
+    local scheme='' url=''
+    read -r scheme url < <(curl "$@" -w '%{scheme} %{url_effective}')
+
+    local path="${url#${scheme}://}"
+    # In case scheme was given in lowercase
+    local path="${url#${scheme,,}://}"
+    path="${path#*/}"
+    path="${path%%\?*}"
+
+    echo "$path"
+}
+
+curled_main() {
+    if (( $# < 1 )) || [[ "${1:-}" == -h ]]; then
+        curled_usage
+        return
+    fi
+
+    local editor=''
+
+    editor="$(curled_editor)" || {
+        local status=$?
+        echo 1>&2 "Unable to infer editor"
+        return $status
+    }
+
+    if ! command -v "$editor" &>/dev/null; then
+       echo 1>&2 "${0##*/}: ${editor}: command not found"
+       exit 1
+    fi
+
+    local tmpfile=''
+    tmpfile="$(mktemp --tmpdir curled.XXXXXXXX)"
+
+    local path=''
+    path="$(curled_download "$@" -o "$tmpfile")"
+
+    local target="${HOME}/.curled/${path}"
+    mkdir -p "${target%/*}"
+    mv "$tmpfile" "$target"
+
+    "$editor" "$target"
+}
+
+[[ "${BASH_SOURCE[0]}" == "$0" ]] && curled_main "$@"
