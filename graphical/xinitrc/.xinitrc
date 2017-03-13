@@ -8,7 +8,7 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME"
 
-DEFAULT_WM="${DEFAULT_WM:-i3}"
+DEFAULT_WM="${DEFAULT_WM:-i3-with-merged-config}"
 
 if [ -d /etc/X11/xinit/xinitrc.d ]
 then
@@ -39,8 +39,8 @@ if command -v urxvtd >/dev/null 2>&1; then
     export TERMINAL=urxvtc
 fi
 
-if [ -n "$1" ]; then
-    exec "$1"
+if [ "$#" -gt 0 ]; then
+    exec "$@"
 else
     exec "${DEFAULT_WM}"
 fi

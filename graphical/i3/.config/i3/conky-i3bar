@@ -1,5 +1,48 @@
 #!/bin/sh
 
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+CONKY_CONFIG_HOME="${CONKY_CONFIG_HOME:-${XDG_CONFIG_HOME}/conky}"
+CONKY_TEXT_HOME="${CONKY_CONFIG_HOME}/conf.d"
+
+cd "$CONKY_CONFIG_HOME" || exit $?
+
+CONKY_CONFIG="conky-i3"
+if ! [ -f "$CONKY_CONFIG" ]; then
+    echo 1>&2 "No such file: conky-i3"
+    exit 1
+fi
+
+CONKY_TEXT=''
+if ! [ -d conf.d ]; then
+    echo 1>&2 "No such directory: ${CONKY_CONFIG_HOME}/conf.d"
+else
+    cd conf.d
+
+    if MY_HOSTNAME="$(hostname 2>/dev/null)" && [ -n "${MY_HOSTNAME:-}" ] && [ -f "${MY_HOSTNAME}.json" ]; then
+        CONKY_TEXT="${CONKY_TEXT_HOME}/${MY_HOSTNAME}.json"
+    elif [ -f /etc/os-release ]; then
+        . /etc/os-release
+
+        # If $NAME == 'Arch Linux', $MY_NAME == 'arch_linux'
+        MY_NAME="${NAME,,}"
+        MY_NAME="$(echo "$MY_NAME" | tr '[:space:]' '_')"
+        if [ -n "${MY_NAME:-}" ] && [ -f "${MY_NAME}.json" ]; then
+            CONKY_TEXT="${CONKY_TEXT_HOME}/${MY_NAME}.json"
+        elif [ -n "${ID_LIKE:-}" ] && [ -f "${ID_LIKE}.json" ]; then
+            CONKY_TEXT="${CONKY_TEXT_HOME}/${ID_LIKE}.json"
+        fi
+    elif MY_ARCH="$(uname -m 2>/dev/null)" && [ -f "${MY_ARCH}.json" ]; then
+        CONKY_TEXT="${CONKY_TEXT_HOME}/${MY_ARCH}.json"
+    elif [ -f base.json ]; then
+        CONKY_TEXT="${CONKY_TEXT_HOME}/base.json"
+    else
+        echo 1>&2 "Unable to locate a conky configuration in ${CONKY_CONFIG_HOME}"
+        exit 1
+    fi
+
+    cd "$CONKY_CONFIG_HOME"
+fi
+
 # 1. Send the header so that i3bar knows we want to use JSON,
 # 2. Begin the endless array,
 # 3. Send an empty first array of blocks to make the loop simpler.
@@ -10,5 +53,4 @@ printf -- '
 '
 
 # Now send blocks with information forever:
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
-exec conky -c "${XDG_CONFIG_HOME}"/conky/conky-i3 -u 1
+exec conky -u 1 -c "$CONKY_CONFIG" -t "$(< "$CONKY_TEXT")"

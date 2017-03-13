@@ -1,1 +1,0 @@
-base/tmux/.tmux.d

@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+is_script() {
+    local maybe_script="${1:?missing required argument}"
+    [[ -x "$maybe_script" ]] && {
+        read -r first_line < "$maybe_script"
+        [[ "$first_line" == '#!'* ]]
+    }
+}
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$EUID}"
+mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$XDG_RUNTIME_DIR"
+
+I3_CONFIG_HOME="${XDG_CONFIG_HOME}/i3"
+I3_EXTRA_CONFIG_HOME="${XDG_CONFIG_HOME}/i3/conf.d"
+I3_RUNTIME_DIR="${XDG_RUNTIME_DIR}/i3"
+
+pushd "$I3_CONFIG_HOME" || exec i3 "$@"
+
+mkdir -p "$I3_RUNTIME_DIR" || exit $?
+
+I3_CONFIG_BASE="${I3_CONFIG_HOME}/config"
+if ! [[ -f "$I3_CONFIG_BASE" ]]; then
+    echo 1>&2 "No such file: $I3_CONFIG_BASE"
+    exit 1
+fi
+
+declare -a I3_CONFIG_FILES=()
+if [[ -d "$I3_EXTRA_CONFIG_HOME" ]]; then
+    pushd "$I3_EXTRA_CONFIG_HOME"
+
+    if MY_ARCH="$(uname -m 2>/dev/null)" && [ -e "$MY_ARCH" ]; then
+        I3_CONFIG_FILES+=("${I3_EXTRA_CONFIG_HOME}/${MY_ARCH}")
+    fi
+
+    if [[ -f /etc/os-release ]]; then
+        source /etc/os-release
+
+        # If $NAME == 'Arch Linux', $MY_NAME == 'arch_linux'
+        MY_NAME="${NAME,,}"
+        MY_NAME="${MY_NAME// /_}"
+
+        if [[ -n "${MY_NAME:-}" ]] && [[ -e "$MY_NAME" ]]; then
+            I3_CONFIG_FILES+=("${I3_EXTRA_CONFIG_HOME}/${MY_NAME}")
+        fi
+
+        if [[ -n "$ID_LIKE" ]] && [[ -e "$ID_LIKE" ]]; then
+            I3_CONFIG_FILES+=("${I3_EXTRA_CONFIG_HOME}/${ID_LIKE}")
+        fi
+    fi
+
+    if [[ -n "${HOSTNAME:-}" ]] && [[ -e "$HOSTNAME" ]]; then
+        I3_CONFIG_FILES+=("${I3_EXTRA_CONFIG_HOME}/${HOSTNAME}")
+    fi
+
+    popd
+fi
+
+declare -a I3_ALL_CONFIG_FILES=()
+shopt -s nullglob
+for i3_config_file in "${I3_CONFIG_FILES[@]}"; do
+    if [[ -d "$i3_config_file" ]]; then
+        I3_ALL_CONFIG_FILES+=("$i3_config_file"/*)
+    elif is_script "$i3_config_file"; then
+        :
+    else
+        I3_ALL_CONFIG_FILES+=("$i3_config_file")
+    fi
+done
+
+cat "${I3_ALL_CONFIG_FILES[@]}" "$I3_CONFIG_BASE" > "${I3_RUNTIME_DIR}/config" || exit $?
+
+popd
+
+exec i3 -c "${I3_RUNTIME_DIR}/config" "$@"

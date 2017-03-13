@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Generate list of installed packages (leaves in package dependency tree).
+# Give it a list with packages that should be ignored in the final list, each
+# package on a separate line.
+
+paccleanlist_handle_ignores() {
+    { if (( $# > 0 )); then
+        cat "$@"
+    elif ! [[ -t 0 ]]; then
+        cat
+    fi ; } | grep -v '^$'
+}
+
+paccleanlist_nonrequired_packages() {
+    expac '%G\t%n' | grep -v '^base' | cut -f 2
+}
+
+paccleanlist_installed_packages() {
+    paccleanlist_nonrequired_packages | expac "%n %N" -Q - | awk '$2 == "" {print $1}'
+}
+
+paccleanlist() {
+    export -f paccleanlist_handle_ignores paccleanlist_installed_packages
+    comm -13 <(paccleanlist_handle_ignores "$@" | sort) <(paccleanlist_installed_packages | sort)
+}
+
+[[ "${BASH_SOURCE[0]}" == "$0" ]] && paccleanlist "$@"

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+tmuxnuke_dead_sessions() {
+    tmux ls | grep -v attached | awk '{print $1}' | sed 's/:$//' | egrep '[[:digit:]]+$'
+}
+
+tmuxnuke() {
+    while read -r session; do
+        tmux kill-session -t "$session"
+    done < <(tmuxnuke_dead_sessions)
+}
+
+[[ "${BASH_SOURCE[0]}" == "$0" ]] && tmuxnuke

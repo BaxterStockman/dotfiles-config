@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+dnsmasq-send() {
+    METHOD="$1"
+    shift
+    dbus-send --system --dest=uk.org.thekelleys.dnsmasq /uk/org/thekelleys/dnsmasq "uk.org.thekelleys.$METHOD" "$@"
+}
+
+[[ "${BASH_SOURCE[0]}" == "$0" ]] && dnsmasq-send "$@"

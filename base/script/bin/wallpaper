@@ -1,16 +1,31 @@
 #!/bin/sh
 
-wallpaper_main() {
-	local wallpaper_dir="${1:-${XDG_CONFIG_HOME}/wallpaper/images}"
+wallpaper() {
+	local wallpaper_dir=''
+
+	if [ $# -gt 0 ]; then
+		wallpaper_dir="$1"
+	else
+		wallpaper_dir="${XDG_CONFIG_HOME:-${HOME}/.config}/wallpaper/images"
+	fi
+
+	if ! [ -d "$wallpaper_dir" ]; then
+		echo 1>&2 "No such directory: $wallpaper_dir"
+		return 1
+	fi
 
 	while : ; do
-		find "$wallpaper_dir" -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |
-			shuf -n1 -z | xargs -0 feh --bg-scale
+		find "$wallpaper_dir" -follow -type f '(' -name '*.jpg' -o -name '*.png' ')' -print0  \
+			| shuf -n1 -z \
+			| xargs -0 feh --bg-scale
 		sleep 15m
 	done
 }
 
-: "${XDG_CONFIG_HOME:-${HOME}/.config}"
-export XDG_CONFIG_HOME
-
-wallpaper_main "$@"
+wallpaper_invocant="$_"
+if [ "$wallpaper_invocant" = "$0" ] || [ "$(readlink -m "$wallpaper_invocant" 2>/dev/null)" = "$(readlink -m /bin/sh)" ]; then
+	unset wallpaper_invocant
+	wallpaper "$@"
+else
+	unset wallpaper_invocant
+fi

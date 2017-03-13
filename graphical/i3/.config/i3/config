@@ -17,34 +17,13 @@ set $wsp8 8
 set $wsp9 9
 set $wsp10 10: mail
 
-# Set display output variables
-set $builtin		eDP1
-set $external_left	DP1
-set $external_right	HDMI2
-
-# set workspaces to particular monitors
-workspace "$wsp1" output $external_left
-workspace "$wsp2" output $external_left
-workspace "$wsp3" output $external_left
-workspace "$wsp4" output $external_left
-workspace "$wsp5" output $external_left
-workspace "$wsp6" output $external_left
-workspace "$wsp7" output $external_left
-workspace "$wsp8" output $external_left
-workspace "$wsp9" output $external_left
-workspace "$wsp10" output $external_right
-
 # run applications on startup
 exec_always compton -c
 exec sh ~/bin/wallpaper
 
-# open applications on particular workspaces on startup
-exec --no-startup-id i3-msg 'workspace $wsp1; exec dwb; exec i3-sensible-terminal'
-exec --no-startup-id i3-msg 'workspace $wsp10; exec thunderbird; exec i3-sensible-terminal'
-
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
-font pango: DejaVuSansMono 9
+font pango: $base_font $base_font_size
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Keybindings
