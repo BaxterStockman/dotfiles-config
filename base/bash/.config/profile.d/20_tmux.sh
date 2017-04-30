@@ -6,6 +6,8 @@
 # sessions. See https://github.com/spencertipping/bashrc-tmux for usage
 # information.
 
+[[ "${TMUX_ENTER:-1}" == 1 ]] || return
+
 # Don't source this file if tmux isn't runnable
 type -a tmux &>/dev/null || return
 
@@ -14,12 +16,17 @@ type -a tmux &>/dev/null || return
 
 # Use a separate socket if we're running in a low-color environment
 if [[ "${TERM}" == linux ]]; then
-    alias tmux='tmux -L locolor'
+    tmux() {
+        command tmux -L locolor "$@"
+    }
+
     return
 fi
 
 if [[ "$(tput colors)" -ge 256 ]]; then
-    alias tmux='tmux -2'
+    tmux() {
+        command tmux -2 "$@"
+    }
 fi
 
 if [[ -z "${TMUX}" ]] && exists tmux &> /dev/null; then
@@ -48,15 +55,15 @@ if [[ -z "${TMUX}" ]] && exists tmux &> /dev/null; then
     if ! tmux has -t "${base_session}-${create_index}"; then
       break
     elif [[ "${session_index_attached["${create_index}"]}" -eq 0 ]]; then
-      exec tmux attach -t "${base_session}-${create_index}"
+      (exec tmux attach -t "${base_session}-${create_index}")
     fi
     ((create_index++))
   done
 
   if [[ -n "${SSH_CONNECTION}" ]]; then
-    exec tmux new-session -s "${base_session}-${create_index}" \
-      -t "${base_session}"
+    (exec tmux new-session -s "${base_session}-${create_index}" \
+      -t "${base_session}")
   else
-    exec tmux new-session -s "${base_session}-${create_index}"
+    (exec tmux new-session -s "${base_session}-${create_index}")
   fi
 fi
