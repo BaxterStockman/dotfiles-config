@@ -142,11 +142,10 @@ function configure_color_prompts() {
     export PS1="${PS1_user}${PS1_suff}"
 }
 
-function set_prompts () {
 # dircolors --print-database uses its own built-in database instead of using
 # /etc/DIR_COLORS. Try to use the external file first to take advantage of user
-# additions. Use internal bash globbing instead of external grep binary.
-
+# additions.
+function set_prompts () {
     # sanitize TERM:
     local safe_term=${TERM//[^[:alnum:]]/?}
 
@@ -169,6 +168,7 @@ function set_prompts () {
         [[ "$entry" == TERM ]] || continue
 
         # `$term' can contain a glob pattern, so is intentionally unquoted
+        # shellcheck disable=SC2053
         if [[ "$TERM" == $term ]]; then
             [[ -n "$dir_colors_file" ]] && eval "$(dircolors -b "$dir_colors_file")"
 
@@ -189,6 +189,8 @@ function set_prompts () {
             return 0
         fi
     done
+
+    exec 514<&-
 
     # show root@ when we do not have colors
     PS1="\u@\h \w \$([[ \$? != 0 ]] && echo \":( \")\$ "
