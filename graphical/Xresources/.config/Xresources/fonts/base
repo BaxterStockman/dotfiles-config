@@ -1,3 +1,11 @@
+#ifndef PIXELSIZE
+    #ifdef PRESENTATION
+        #define PIXELSIZE 28
+    #else
+        #define PIXELSIZE 13
+    #endif
+#endif
+
 Xft*dpi:        96
 Xft*antialias:  true
 Xft*hinting:    full

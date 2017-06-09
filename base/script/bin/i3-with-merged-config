@@ -18,19 +18,19 @@ I3_CONFIG_HOME="${XDG_CONFIG_HOME}/i3"
 I3_EXTRA_CONFIG_HOME="${XDG_CONFIG_HOME}/i3/conf.d"
 I3_RUNTIME_DIR="${XDG_RUNTIME_DIR}/i3"
 
-pushd "$I3_CONFIG_HOME" || exec i3 "$@"
+pushd "$I3_CONFIG_HOME" &>/dev/null || exec i3 "$@"
 
 mkdir -p "$I3_RUNTIME_DIR" || exit $?
 
 I3_CONFIG_BASE="${I3_CONFIG_HOME}/config"
 if ! [[ -f "$I3_CONFIG_BASE" ]]; then
-    echo 1>&2 "No such file: $I3_CONFIG_BASE"
+    echo 1>&2 "no such file: $I3_CONFIG_BASE"
     exit 1
 fi
 
 declare -a I3_CONFIG_FILES=()
 if [[ -d "$I3_EXTRA_CONFIG_HOME" ]]; then
-    pushd "$I3_EXTRA_CONFIG_HOME"
+    pushd "$I3_EXTRA_CONFIG_HOME" &>/dev/null
 
     if MY_ARCH="$(uname -m 2>/dev/null)" && [ -e "$MY_ARCH" ]; then
         I3_CONFIG_FILES+=("${I3_EXTRA_CONFIG_HOME}/${MY_ARCH}")
@@ -56,7 +56,7 @@ if [[ -d "$I3_EXTRA_CONFIG_HOME" ]]; then
         I3_CONFIG_FILES+=("${I3_EXTRA_CONFIG_HOME}/${HOSTNAME}")
     fi
 
-    popd
+    popd &>/dev/null
 fi
 
 declare -a I3_ALL_CONFIG_FILES=()
@@ -71,8 +71,43 @@ for i3_config_file in "${I3_CONFIG_FILES[@]}"; do
     fi
 done
 
+: "${I3_EXEC:=1}"
+while (( $# > 0 )); do
+    case "$1" in
+        --exec)
+            I3_EXEC=1
+            ;;
+        --noexec)
+            I3_EXEC=0
+            ;;
+        --extra-config)
+            if [[ "${2:+SET}" != SET ]]; then
+                echo 1>&2 "missing argument to --extra-config"
+                exit 1
+            elif ! [[ -r "$2" ]]; then
+                echo 1>&2 "$2 is not readable"
+                exit 1
+            elif [[ -d "$2" ]]; then
+                echo 1>&2 "$2 is a directory"
+                exit 1
+            else
+                I3_ALL_CONFIG_FILES+=("$2")
+            fi
+            shift
+            ;;
+        *)
+            echo 1>&2 "unrecognized argument $1"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
 cat "${I3_ALL_CONFIG_FILES[@]}" "$I3_CONFIG_BASE" > "${I3_RUNTIME_DIR}/config" || exit $?
 
-popd
+popd &>/dev/null
 
-exec i3 -c "${I3_RUNTIME_DIR}/config" "$@"
+if [[ "${I3_EXEC:-1}" == 1 ]]; then
+    unset I3_EXEC
+    exec i3 -c "${I3_RUNTIME_DIR}/config" "$@"
+fi

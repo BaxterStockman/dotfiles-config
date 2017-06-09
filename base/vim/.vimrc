@@ -725,7 +725,7 @@ let g:use_xdg_layout = 1
 function! InitializeDirectories()
   if exists('g:use_xdg_layout') && g:use_xdg_layout
     call InitializeXDGLayout()
-    let parent = $XDG_CONFIG_HOME . '/vim/'
+    let parent = $XDG_CACHE_HOME . '/vim/'
   else
     let parent = $HOME . '/.vim'
   endif

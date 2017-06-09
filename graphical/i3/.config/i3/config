@@ -35,6 +35,9 @@ set $mod Mod1
 # Use Mouse + $mod to drag floating windows to the desired position
 floating_modifier $mod
 
+# Lock the screen
+bindsym $mod+Escape i3lock
+
 # Start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+c exec i3-sensible-terminal
